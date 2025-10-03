@@ -7,30 +7,27 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessMove {
-
-    public final ChessPosition startPosition;
-    public final ChessPosition endPosition;
-    public final ChessPiece.PieceType promotionPiece;
-
+    private final ChessPosition start, end;
+    private final ChessPiece.PieceType promotion;
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
-        this.startPosition = startPosition;
-        this.endPosition = endPosition;
-        this.promotionPiece = promotionPiece;
+        this.start = startPosition;
+        this.end = endPosition;
+        this.promotion = promotionPiece;
     }
 
     /**
      * @return ChessPosition of starting location
      */
     public ChessPosition getStartPosition() {
-        return startPosition;
+        return start;
     }
 
     /**
      * @return ChessPosition of ending location
      */
     public ChessPosition getEndPosition() {
-        return endPosition;
+        return end;
     }
 
     /**
@@ -40,31 +37,23 @@ public class ChessMove {
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
     public ChessPiece.PieceType getPromotionPiece() {
-        return promotionPiece;
+        return promotion;
     }
-
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof ChessMove)) return false;
-        ChessMove other = (ChessMove) obj;
-        return startPosition.equals(other.startPosition)
-                && endPosition.equals(other.endPosition)
-                && ((promotionPiece == null && other.promotionPiece == null)
-                || (promotionPiece != null && promotionPiece.equals(other.promotionPiece)));
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessMove)) return false;
+        ChessMove m = (ChessMove) o;
+        return start.equals(m.start) && end.equals(m.end) && (promotion == null && m.promotion == null ||
+                (promotion != null && promotion.equals(m.promotion)));
     }
-
+    @Override
     public int hashCode() {
-        int result = startPosition.hashCode();
-        result = 31 * result + endPosition.hashCode();
-        result = 31 * result + (promotionPiece != null ? promotionPiece.hashCode() : 0);
-        return result;
+        int h = start.hashCode() * 31 + end.hashCode();
+        return promotion == null ? h : h + promotion.hashCode();
     }
-
+    @Override
     public String toString() {
-        return "Move{" +
-                "from=" + startPosition +
-                ", to=" + endPosition +
-                (promotionPiece != null ? ", promote=" + promotionPiece : "") +
-                '}';
+        return start + "->" + end + (promotion != null ? " = " + promotion : "");
     }
 }
