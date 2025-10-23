@@ -27,7 +27,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void listGames_success() throws Exception {
+    public void listGamesSuccess() throws Exception {
         CreateGameRequest req = new CreateGameRequest("TestGame");
         gameService.createGame(token, req);
         List<GameData> games = gameService.listGames(token);
@@ -37,12 +37,12 @@ public class GameServiceTest {
     }
 
     @Test
-    public void listGames_unauthorized() {
+    public void listGamesUnauthorized() {
         assertThrows(DataAccessException.class, () -> gameService.listGames("invalid-token"));
     }
 
     @Test
-    public void createGame_success() throws Exception {
+    public void createGameSuccess() throws Exception {
         CreateGameRequest req = new CreateGameRequest("ChessMatch");
         CreateGameResult res = gameService.createGame(token, req);
         assertNotNull(res);
@@ -52,19 +52,19 @@ public class GameServiceTest {
     }
 
     @Test
-    public void createGame_unauthorized() {
+    public void createGameUnauthorized() {
         CreateGameRequest req = new CreateGameRequest("ChessMatch");
         assertThrows(DataAccessException.class, () -> gameService.createGame("bad-token", req));
     }
 
     @Test
-    public void createGame_badRequest() {
+    public void createGameBadRequest() {
         assertThrows(DataAccessException.class, () -> gameService.createGame(token, null));
         assertThrows(DataAccessException.class, () -> gameService.createGame(token, new CreateGameRequest(null)));
     }
 
     @Test
-    public void joinGame_successWhite() throws Exception {
+    public void joinGameSuccessWhite() throws Exception {
         CreateGameRequest req = new CreateGameRequest("Match1");
         int gameID = gameService.createGame(token, req).gameID();
         JoinGameRequest joinReq = new JoinGameRequest("WHITE", gameID);
@@ -75,7 +75,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void joinGame_successBlack() throws Exception {
+    public void joinGameSuccessBlack() throws Exception {
         var userService = new UserService(dao);
         String token2 = userService.register(new service.requests.RegisterRequest("player2","pw","p2@example.com")).authToken();
         CreateGameRequest req = new CreateGameRequest("Match2");
@@ -90,7 +90,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void joinGame_alreadyTaken() throws Exception {
+    public void joinGameAlreadyTaken() throws Exception {
         CreateGameRequest req = new CreateGameRequest("Match3");
         int gameID = gameService.createGame(token, req).gameID();
 
@@ -99,7 +99,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void joinGame_badRequest() {
+    public void joinGameBadRequest() {
         assertThrows(DataAccessException.class, () -> gameService.joinGame(token, null));
         assertThrows(DataAccessException.class, () -> gameService.joinGame(token, new JoinGameRequest("INVALID_COLOR", 1)));
         assertThrows(DataAccessException.class, () -> gameService.joinGame(token, new JoinGameRequest("WHITE", 999))); // non-existent game

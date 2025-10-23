@@ -21,7 +21,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void register_success() throws Exception {
+    public void registerSuccess() throws Exception {
         var req = new RegisterRequest("alice", "pw", "a@example.com");
         RegisterResult res = userService.register(req);
         assertEquals("alice", res.username());
@@ -29,14 +29,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void register_alreadyTaken() throws Exception {
+    public void registerAlreadyTaken() throws Exception {
         var req = new RegisterRequest("bob", "pw", "b@example.com");
         userService.register(req);
         assertThrows(DataAccessException.class, () -> userService.register(req));
     }
 
     @Test
-    public void login_success_and_logout() throws Exception {
+    public void loginSuccessAndLogout() throws Exception {
         var r = new RegisterRequest("carol", "pw", "c@example.com");
         RegisterResult rr = userService.register(r);
 
@@ -52,7 +52,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void login_badPassword_unauthorized() throws Exception {
+    public void loginBadPasswordUnauthorized() throws Exception {
         var r = new RegisterRequest("dan", "pw", "d@example.com");
         userService.register(r);
         var loginReq = new LoginRequest("dan", "wrongpw");
