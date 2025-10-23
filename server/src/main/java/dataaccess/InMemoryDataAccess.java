@@ -24,8 +24,12 @@ public class InMemoryDataAccess implements DataAccess {
 
     @Override
     public void createUser(UserData u) throws DataAccessException {
-        if (u == null || u.username() == null) throw new DataAccessException("bad user");
-        if (users.putIfAbsent(u.username(), u) != null) throw new DataAccessException("already taken");
+        if (u == null || u.username() == null) {
+            throw new DataAccessException("bad user");
+        }
+        if (users.putIfAbsent(u.username(), u) != null) {
+            throw new DataAccessException("already taken");
+        }
     }
 
     @Override
@@ -53,8 +57,12 @@ public class InMemoryDataAccess implements DataAccess {
 
     @Override
     public void updateGame(GameData g) throws DataAccessException {
-        if (g == null) throw new DataAccessException("bad game");
-        if (!games.containsKey(g.gameID())) throw new DataAccessException("game not found");
+        if (g == null) {
+            throw new DataAccessException("bad game");
+        }
+        if (!games.containsKey(g.gameID())) {
+            throw new DataAccessException("game not found");
+        }
         games.put(g.gameID(), g);
     }
 
@@ -70,6 +78,8 @@ public class InMemoryDataAccess implements DataAccess {
 
     @Override
     public void deleteAuth(String token) throws DataAccessException {
-        if (token == null || auths.remove(token) == null) throw new DataAccessException("unauthorized");
+        if (token == null || auths.remove(token) == null) {
+            throw new DataAccessException("unauthorized");
+        }
     }
 }
