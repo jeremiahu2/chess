@@ -66,11 +66,16 @@ public class ChessPiece {
             int r = p.getRow(), c = p.getColumn();
             while(true) {
                 r += d[0]; c += d[1];
-                if (r < 1 || r > 8 || c < 1 || c > 8) break;
+                if (r < 1 || r > 8 || c < 1 || c > 8) {
+                    break;
+                }
                 ChessPosition np = new ChessPosition(r, c);
                 ChessPiece other = b.getPiece(np);
-                if (other == null) m.add(new ChessMove(p, np, null));
-                else { if (other.color != color) m.add(new ChessMove(p, np, null)); break; }
+                if (other == null) {
+                    m.add(new ChessMove(p, np, null));
+                } else { if (other.color != color) {
+                    m.add(new ChessMove(p, np, null));
+                } break; }
             }
         }
     }
@@ -92,7 +97,9 @@ public class ChessPiece {
             promoteOrAdd(p, one, m, promo);
             if (r == start) {
                 ChessPosition two = new ChessPosition(r + 2 * dir, c);
-                if (b.getPiece(two) == null) m.add(new ChessMove(p, two, null));
+                if (b.getPiece(two) == null) {
+                    m.add(new ChessMove(p, two, null));
+                }
             }
         }
         for (int dc:new int[]{-1, 1}) {
@@ -100,7 +107,9 @@ public class ChessPiece {
             if (nc >= 1 && nc <= 8 && r + dir >= 1 && r + dir <= 8) {
                 ChessPosition diag = new ChessPosition(r + dir, nc);
                 ChessPiece o = b.getPiece(diag);
-                if (o != null && o.color != color) promoteOrAdd(p, diag, m, promo);
+                if (o != null && o.color != color) {
+                    promoteOrAdd(p, diag, m, promo);
+                }
             }
         }
     }
@@ -110,7 +119,9 @@ public class ChessPiece {
             m.add(new ChessMove(s, e, PieceType.ROOK));
             m.add(new ChessMove(s, e, PieceType.BISHOP));
             m.add(new ChessMove(s, e, PieceType.KNIGHT));
-        } else m.add(new ChessMove(s, e, null));
+        } else {
+            m.add(new ChessMove(s, e, null));
+        }
     }
     private void addMoves(ChessBoard b, ChessPosition p, List<ChessMove> m, int[][] deltas) {
         for (int[] delta : deltas) {
@@ -126,8 +137,12 @@ public class ChessPiece {
     }
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChessPiece)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ChessPiece)) {
+            return false;
+        }
         ChessPiece other = (ChessPiece) o;
         return this.color == other.color && this.type == other.type;
     }

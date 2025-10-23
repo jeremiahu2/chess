@@ -29,8 +29,12 @@ public class ChessPosition {
     }
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChessPosition)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ChessPosition)) {
+            return false;
+        }
         ChessPosition p = (ChessPosition) o;
         return row == p.row && col == p.col;
     }

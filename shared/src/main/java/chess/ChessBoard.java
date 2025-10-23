@@ -56,15 +56,21 @@ public class ChessBoard {
     }
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChessBoard)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ChessBoard)) {
+            return false;
+        }
         ChessBoard other = (ChessBoard) o;
         for (int r = 1; r <= 8; r++) {
             for (int c = 1; c <= 8; c++) {
                 ChessPosition pos = new ChessPosition(r, c);
                 ChessPiece p1 = this.getPiece(pos);
                 ChessPiece p2 = other.getPiece(pos);
-                if (!Objects.equals(p1, p2)) return false;
+                if (!Objects.equals(p1, p2)) {
+                    return false;
+                }
             }
         }
         return true;
