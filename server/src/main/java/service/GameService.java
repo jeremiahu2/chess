@@ -19,15 +19,19 @@ public class GameService {
     }
 
     public List<GameData> listGames(String authToken) throws DataAccessException {
-        if (authToken == null || dao.getAuth(authToken).isEmpty()) throw new DataAccessException("unauthorized");
+        if (authToken == null || dao.getAuth(authToken).isEmpty()) {
+            throw new DataAccessException("unauthorized");
+        }
         return dao.listGames();
     }
 
     public CreateGameResult createGame(String authToken, CreateGameRequest req) throws DataAccessException {
-        if (authToken == null || dao.getAuth(authToken).isEmpty()) throw new DataAccessException("unauthorized");
-        if (req == null || req.gameName() == null) throw new DataAccessException("bad request");
-
-        // create minimal ChessGame instance (or use real one)
+        if (authToken == null || dao.getAuth(authToken).isEmpty()) {
+            throw new DataAccessException("unauthorized");
+        }
+        if (req == null || req.gameName() == null) {
+            throw new DataAccessException("bad request");
+        }
         ChessGame game = new ChessGame();
         GameData toCreate = new GameData(0, null, null, req.gameName(), game);
         GameData created = dao.createGame(toCreate);
@@ -35,22 +39,29 @@ public class GameService {
     }
 
     public void joinGame(String authToken, JoinGameRequest req) throws DataAccessException {
-        if (authToken == null || dao.getAuth(authToken).isEmpty()) throw new DataAccessException("unauthorized");
-        if (req == null) throw new DataAccessException("bad request");
-
+        if (authToken == null || dao.getAuth(authToken).isEmpty()) {
+            throw new DataAccessException("unauthorized");
+        }
+        if (req == null) {
+            throw new DataAccessException("bad request");
+        }
         Optional<GameData> gOpt = dao.getGame(req.gameID());
-        if (gOpt.isEmpty()) throw new DataAccessException("bad request");
-
+        if (gOpt.isEmpty()) {
+            throw new DataAccessException("bad request");
+        }
         GameData g = gOpt.get();
         String playerColor = req.playerColor();
         String username = dao.getAuth(authToken).get().username();
-
         if ("WHITE".equalsIgnoreCase(playerColor)) {
-            if (g.whiteUsername() != null) throw new DataAccessException("already taken");
+            if (g.whiteUsername() != null) {
+                throw new DataAccessException("already taken");
+            }
             GameData updated = new GameData(g.gameID(), username, g.blackUsername(), g.gameName(), g.game());
             dao.updateGame(updated);
         } else if ("BLACK".equalsIgnoreCase(playerColor)) {
-            if (g.blackUsername() != null) throw new DataAccessException("already taken");
+            if (g.blackUsername() != null) {
+                throw new DataAccessException("already taken");
+            }
             GameData updated = new GameData(g.gameID(), g.whiteUsername(), username, g.gameName(), g.game());
             dao.updateGame(updated);
         } else {
