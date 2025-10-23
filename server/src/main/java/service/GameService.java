@@ -1,10 +1,9 @@
 package service;
 
-import dataAccess.DataAccess;
-import dataAccess.DataAccessException;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessException;
 import model.GameData;
 import model.ChessGame;
-import model.AuthData;
 import service.requests.CreateGameRequest;
 import service.requests.JoinGameRequest;
 import service.results.CreateGameResult;

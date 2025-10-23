@@ -5,7 +5,7 @@ import io.javalin.http.Context;
 import service.UserService;
 import service.requests.RegisterRequest;
 import service.results.RegisterResult;
-import dataAccess.DataAccessException;
+import dataaccess.DataAccessException;
 
 import java.util.Map;
 

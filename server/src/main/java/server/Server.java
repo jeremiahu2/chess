@@ -1,8 +1,8 @@
 package server;
 
 import io.javalin.Javalin;
-import dataAccess.InMemoryDataAccess;
-import dataAccess.DataAccess;
+import dataaccess.InMemoryDataAccess;
+import dataaccess.DataAccess;
 import service.UserService;
 import service.GameService;
 import handlers.UserHandler;

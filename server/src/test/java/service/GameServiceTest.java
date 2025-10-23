@@ -1,7 +1,7 @@
 package service;
 
-import dataAccess.InMemoryDataAccess;
-import dataAccess.DataAccessException;
+import dataaccess.InMemoryDataAccess;
+import dataaccess.DataAccessException;
 import model.GameData;
 import service.requests.CreateGameRequest;
 import service.requests.JoinGameRequest;

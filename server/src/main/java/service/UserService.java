@@ -1,7 +1,7 @@
 package service;
 
-import dataAccess.DataAccess;
-import dataAccess.DataAccessException;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessException;
 import model.UserData;
 import model.AuthData;
 import service.requests.RegisterRequest;

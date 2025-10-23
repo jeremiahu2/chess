@@ -6,7 +6,7 @@ import service.GameService;
 import service.requests.CreateGameRequest;
 import service.requests.JoinGameRequest;
 import service.results.CreateGameResult;
-import dataAccess.DataAccessException;
+import dataaccess.DataAccessException;
 import model.GameData;
 
 import java.util.List;
