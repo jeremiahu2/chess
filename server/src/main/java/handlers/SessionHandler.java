@@ -22,9 +22,13 @@ public class SessionHandler {
             ctx.status(200).json(res);
         } catch (DataAccessException e) {
             String msg = e.getMessage();
-            if ("bad request".equals(msg)) ctx.status(400).json(Map.of("message", "Error: bad request"));
-            else if ("unauthorized".equals(msg)) ctx.status(401).json(Map.of("message", "Error: unauthorized"));
-            else ctx.status(500).json(Map.of("message", "Error: " + msg));
+            if ("bad request".equals(msg)) {
+                ctx.status(400).json(Map.of("message", "Error: bad request"));
+            } else if ("unauthorized".equals(msg)) {
+                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+            } else {
+                ctx.status(500).json(Map.of("message", "Error: " + msg));
+            }
         } catch (Exception e) {
             ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
         }
@@ -37,8 +41,11 @@ public class SessionHandler {
             ctx.status(200).json(Map.of());
         } catch (DataAccessException e) {
             String msg = e.getMessage();
-            if ("unauthorized".equals(msg)) ctx.status(401).json(Map.of("message", "Error: unauthorized"));
-            else ctx.status(500).json(Map.of("message", "Error: " + msg));
+            if ("unauthorized".equals(msg)) {
+                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+            } else {
+                ctx.status(500).json(Map.of("message", "Error: " + msg));
+            }
         } catch (Exception e) {
             ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
         }
