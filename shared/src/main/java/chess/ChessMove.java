@@ -40,9 +40,13 @@ public class ChessMove {
         return promotion;
     }
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChessMove)) return false;
+    public boolean equals (Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ChessMove)) {
+            return false;
+        }
         ChessMove m = (ChessMove) o;
         return start.equals(m.start) && end.equals(m.end) && (promotion == null && m.promotion == null ||
                 (promotion != null && promotion.equals(m.promotion)));
