@@ -106,7 +106,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void joinGame_unauthorized() throws Exception {
+    public void joinGameUnauthorized() throws Exception {
         CreateGameRequest req = new CreateGameRequest("Match4");
         int gameID = gameService.createGame(token, req).gameID();
 
