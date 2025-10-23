@@ -1,0 +1,46 @@
+package handlers;
+
+import com.google.gson.Gson;
+import io.javalin.http.Context;
+import service.UserService;
+import service.requests.LoginRequest;
+import service.results.LoginResult;
+import dataAccess.DataAccessException;
+
+import java.util.Map;
+
+public class SessionHandler {
+    private final UserService userService;
+    private final Gson gson = new Gson();
+
+    public SessionHandler(UserService userService) { this.userService = userService; }
+
+    public void login(Context ctx) {
+        try {
+            LoginRequest req = gson.fromJson(ctx.body(), LoginRequest.class);
+            LoginResult res = userService.login(req);
+            ctx.status(200).json(res);
+        } catch (DataAccessException e) {
+            String msg = e.getMessage();
+            if ("bad request".equals(msg)) ctx.status(400).json(Map.of("message", "Error: bad request"));
+            else if ("unauthorized".equals(msg)) ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+            else ctx.status(500).json(Map.of("message", "Error: " + msg));
+        } catch (Exception e) {
+            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+        }
+    }
+
+    public void logout(Context ctx) {
+        try {
+            String token = ctx.header("authorization");
+            userService.logout(token);
+            ctx.status(200).json(Map.of());
+        } catch (DataAccessException e) {
+            String msg = e.getMessage();
+            if ("unauthorized".equals(msg)) ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+            else ctx.status(500).json(Map.of("message", "Error: " + msg));
+        } catch (Exception e) {
+            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+        }
+    }
+}
