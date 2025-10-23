@@ -12,10 +12,10 @@ public class ChessGame {
     private ChessBoard board;
     private boolean whiteKingMoved = false;
     private boolean blackKingMoved = false;
-    private boolean whiteRookA1Moved = false; // rook at (1,1)
-    private boolean whiteRookH1Moved = false; // rook at (1,8)
-    private boolean blackRookA8Moved = false; // rook at (8,1)
-    private boolean blackRookH8Moved = false; // rook at (8,8)
+    private boolean whiteRookA1Moved = false;
+    private boolean whiteRookH1Moved = false;
+    private boolean blackRookA8Moved = false;
+    private boolean blackRookH8Moved = false;
     private ChessMove lastMove = null;
     public ChessGame() {
         board = new ChessBoard();
@@ -223,7 +223,7 @@ public class ChessGame {
                 ChessPiece p = board.getPiece(pos);
                 if (p != null && p.getTeamColor() == team) {
                     Collection<ChessMove> moves = validMoves(pos);
-                    if (moves != null && !moves.isEmpty()) return false; // there is at least one legal move
+                    if (moves != null && !moves.isEmpty()) return false;
                 }
             }
         }
