@@ -76,25 +76,11 @@ public class ChessPiece {
     }
     private void kingMoves(ChessBoard b, ChessPosition p, List<ChessMove> m) {
         int[][]d = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
-        for (int []x:d) {
-            int r = p.getRow() + x[0], c = p.getColumn() + x[1];
-            if (r >= 1 && r <= 8 && c >= 1 && c <= 8) {
-                ChessPosition np = new ChessPosition(r, c);
-                ChessPiece o = b.getPiece(np);
-                if (o == null || o.color != color) m.add(new ChessMove(p, np, null));
-            }
-        }
+        addMoves(b, p, m, d);
     }
     private void knightMoves(ChessBoard b, ChessPosition p, List<ChessMove> m) {
         int [][]j = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
-        for (int[]x:j) {
-            int r = p.getRow() + x[0], c = p.getColumn() + x[1];
-            if (r >= 1 && r <= 8 && c >= 1 && c <= 8) {
-                ChessPosition np = new ChessPosition(r, c);
-                ChessPiece o = b.getPiece(np);
-                if (o == null || o.color != color) m.add(new ChessMove(p, np, null));
-            }
-        }
+        addMoves(b, p, m, j);
     }
     private void pawnMoves(ChessBoard b, ChessPosition p, List<ChessMove> m) {
         int dir = color == ChessGame.TeamColor.WHITE ? 1 : -1;
@@ -125,6 +111,18 @@ public class ChessPiece {
             m.add(new ChessMove(s, e, PieceType.BISHOP));
             m.add(new ChessMove(s, e, PieceType.KNIGHT));
         } else m.add(new ChessMove(s, e, null));
+    }
+    private void addMoves(ChessBoard b, ChessPosition p, List<ChessMove> m, int[][] deltas) {
+        for (int[] delta : deltas) {
+            int r = p.getRow() + delta[0], c = p.getColumn() + delta[1];
+            if (r >= 1 && r <= 8 && c >= 1 && c <= 8) {
+                ChessPosition np = new ChessPosition(r, c);
+                ChessPiece o = b.getPiece(np);
+                if (o == null || o.color != color) {
+                    m.add(new ChessMove(p, np, null));
+                }
+            }
+        }
     }
     @Override
     public boolean equals(Object o) {
