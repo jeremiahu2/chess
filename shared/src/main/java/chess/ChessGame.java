@@ -119,26 +119,34 @@ public class ChessGame {
         return board;
     }
 
-    private boolean inCheck(ChessBoard b, TeamColor team) {
-        ChessPosition king = findKing(b, team);
+    private boolean inCheck(ChessBoard board, TeamColor team) {
+        ChessPosition king = findKing(board, team);
         if (king == null) {
             return true;
         }
         for (int r = 1; r <= 8; r++) {
             for (int c = 1; c <= 8; c++) {
-                ChessPosition pos = new ChessPosition(r, c);
-                ChessPiece piece = b.getPiece(pos);
-                if (piece != null && piece.getTeamColor() != team) {
-                    Collection<ChessMove> moves = piece.pieceMoves(b, pos);
-                    if (moves == null) {
-                        continue;
-                    }
-                    for (ChessMove m : moves) {
-                        if (m.getEndPosition().equals(king)) {
-                            return true;
-                        }
-                    }
+                if (isEnemyThreateningKing(board, team, r, c, king)) {
+                    return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean isEnemyThreateningKing(ChessBoard board, TeamColor team, int r, int c, ChessPosition king) {
+        ChessPosition pos = new ChessPosition(r, c);
+        ChessPiece piece = board.getPiece(pos);
+        if (piece == null || piece.getTeamColor() == team) {
+            return false;
+        }
+        Collection<ChessMove> moves = piece.pieceMoves(board, pos);
+        if (moves == null) {
+            return false;
+        }
+        for (ChessMove move : moves) {
+            if (move.getEndPosition().equals(king)) {
+                return true;
             }
         }
         return false;
@@ -242,15 +250,24 @@ public class ChessGame {
     private boolean isSquareAttacked(ChessBoard board, ChessPosition square, TeamColor team) {
         for (int r = 1; r <= 8; r++) {
             for (int c = 1; c <= 8; c++) {
-                ChessPosition pos = new ChessPosition(r, c);
-                ChessPiece piece = board.getPiece(pos);
-                if (piece != null && piece.getTeamColor() != team) {
-                    for (ChessMove move : piece.pieceMoves(board, pos)) {
-                        if (move.getEndPosition().equals(square)) {
-                            return true;
-                        }
-                    }
+                if (isEnemyPieceAttacking(board, square, team, r, c)) {
+                    return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean isEnemyPieceAttacking(ChessBoard board, ChessPosition target, TeamColor team, int r, int c) {
+        ChessPosition pos = new ChessPosition(r, c);
+        ChessPiece piece = board.getPiece(pos);
+        if (piece == null || piece.getTeamColor() == team) {
+            return false;
+        }
+
+        for (ChessMove move : piece.pieceMoves(board, pos)) {
+            if (move.getEndPosition().equals(target)) {
+                return true;
             }
         }
         return false;
