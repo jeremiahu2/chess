@@ -1,6 +1,7 @@
 package server;
 
 import io.javalin.Javalin;
+import io.javalin.json.JavalinJackson;
 import dataaccess.InMemoryDataAccess;
 import dataaccess.DataAccess;
 import service.UserService;
@@ -43,10 +44,14 @@ public class Server {
 
     public int run(int desiredPort) {
         javalin = Javalin.create(config -> {
+            // Configure static files
             Path webDir = Path.of("web");
             if (Files.exists(webDir)) {
                 config.staticFiles.add(webDir.toString());
             }
+
+            // Configure Jackson for JSON
+            config.jsonMapper(new JavalinJackson());
         }).start(desiredPort);
 
         registerEndpoints();
