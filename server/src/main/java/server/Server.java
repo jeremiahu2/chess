@@ -49,8 +49,6 @@ public class Server {
             if (Files.exists(webDir)) {
                 config.staticFiles.add(webDir.toString());
             }
-
-            // Configure Jackson for JSON
             config.jsonMapper(new JavalinJackson());
         }).start(desiredPort);
 
