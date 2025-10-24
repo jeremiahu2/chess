@@ -29,9 +29,9 @@ public class Server {
         var userHandler = new UserHandler(userService);
         var sessionHandler = new SessionHandler(userService);
         var gameHandler = new GameHandler(gameService);
-        javalin.delete("/db", ctx -> {
+        javalin.delete("/db/clear", ctx -> {
             dao.clear();
-            ctx.status(200).json(Map.of());
+            ctx.status(200);
         });
         javalin.post("/user", userHandler::register);
         javalin.post("/session", sessionHandler::login);
