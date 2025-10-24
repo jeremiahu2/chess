@@ -3,7 +3,6 @@ package server;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import io.javalin.json.JavalinJackson;
-import io.javalin.plugin.bundled.CorsPlugin;
 import handlers.GameHandler;
 import handlers.SessionHandler;
 import handlers.UserHandler;
@@ -51,11 +50,11 @@ public class Server {
     private void configureJson(JavalinConfig config) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        config.jsonMapper(new JavalinJackson(objectMapper, true));
+        config.jsonMapper(new JavalinJackson(objectMapper));
     }
 
     private void configureCors(JavalinConfig config) {
-        config.registerPlugin(new CorsPlugin(cors -> cors.addRule(rule -> rule.anyHost())));
+        config.plugins.enableCors(cors -> cors.add(it -> it.anyHost()));
     }
 
     private void configureStaticFiles(JavalinConfig config) {
