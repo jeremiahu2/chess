@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chess API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input, button { margin: 5px; }
+        pre { background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+<h1>Chess Server Test Page</h1>
+
+<h2>Register</h2>
+<input id="reg-username" placeholder="Username">
+<input id="reg-password" placeholder="Password" type="password">
+<input id="reg-email" placeholder="Email">
+<button onclick="register()">Register</button>
+<pre id="reg-result"></pre>
+
+<h2>Login</h2>
+<input id="login-username" placeholder="Username">
+<input id="login-password" placeholder="Password" type="password">
+<button onclick="login()">Login</button>
+<pre id="login-result"></pre>
+
+<h2>Game Actions</h2>
+<input id="game-name" placeholder="Game Name">
+<button onclick="createGame()">Create Game</button>
+<button onclick="listGames()">List Games</button>
+<input id="join-game-id" placeholder="Game ID">
+<select id="join-color">
+    <option value="WHITE">WHITE</option>
+    <option value="BLACK">BLACK</option>
+</select>
+<button onclick="joinGame()">Join Game</button>
+<pre id="game-result"></pre>
+
+<h2>Clear Database</h2>
+<button onclick="clearDB()">Clear DB</button>
+<pre id="clear-result"></pre>
+
+<script>
+    let authToken = "";
+
+    async function register() {
+      const username = document.getElementById('reg-username').value;
+      const password = document.getElementById('reg-password').value;
+      const email = document.getElementById('reg-email').value;
+
+      const res = await fetch('/user', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username, password, email})
+      });
+
+      const data = await res.json();
+      if (res.ok) authToken = data.authToken;
+      document.getElementById('reg-result').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function login() {
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+
+      const res = await fetch('/session', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username, password})
+      });
+
+      const data = await res.json();
+      if (res.ok) authToken = data.authToken;
+      document.getElementById('login-result').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function createGame() {
+      const gameName = document.getElementById('game-name').value;
+
+      const res = await fetch('/game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': authToken
+        },
+        body: JSON.stringify({gameName})
+      });
+
+      const data = await res.json();
+      document.getElementById('game-result').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function listGames() {
+      const res = await fetch('/game', {
+        method: 'GET',
+        headers: { 'authorization': authToken }
+      });
+
+      const data = await res.json();
+      document.getElementById('game-result').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function joinGame() {
+      const gameID = parseInt(document.getElementById('join-game-id').value);
+      const playerColor = document.getElementById('join-color').value;
+
+      const res = await fetch('/game', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': authToken
+        },
+        body: JSON.stringify({gameID, playerColor})
+      });
+
+      const data = await res.json();
+      document.getElementById('game-result').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function clearDB() {
+      const res = await fetch('/db', { method: 'DELETE' });
+      const data = await res.json();
+      document.getElementById('clear-result').textContent = JSON.stringify(data, null, 2);
+    }
+</script>
+</body>
+</html>

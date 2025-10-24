@@ -1,21 +1,23 @@
 package server;
 
 import io.javalin.Javalin;
-import io.javalin.json.JavalinJackson;
 import io.javalin.config.JavalinConfig;
-import dataaccess.InMemoryDataAccess;
-import dataaccess.DataAccess;
-import service.UserService;
-import service.GameService;
-import handlers.UserHandler;
-import handlers.SessionHandler;
+import io.javalin.json.JavalinJackson;
+import io.javalin.plugin.bundled.CorsPlugin;
 import handlers.GameHandler;
+import handlers.SessionHandler;
+import handlers.UserHandler;
+import service.GameService;
+import service.UserService;
+import dataaccess.DataAccess;
+import dataaccess.InMemoryDataAccess;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
 public class Server {
+
     private Javalin javalin;
     private final DataAccess dao;
     private final UserService userService;
@@ -28,13 +30,15 @@ public class Server {
     }
 
     private void registerEndpoints() {
-        var userHandler = new UserHandler(userService);
-        var sessionHandler = new SessionHandler(userService);
-        var gameHandler = new GameHandler(gameService);
+        UserHandler userHandler = new UserHandler(userService);
+        SessionHandler sessionHandler = new SessionHandler(userService);
+        GameHandler gameHandler = new GameHandler(gameService);
+
         javalin.delete("/db", ctx -> {
             dao.clear();
             ctx.status(200).json(Map.of());
         });
+
         javalin.post("/user", userHandler::register);
         javalin.post("/session", sessionHandler::login);
         javalin.delete("/session", sessionHandler::logout);
@@ -43,21 +47,14 @@ public class Server {
         javalin.put("/game", gameHandler::joinGame);
     }
 
-    public int run(int desiredPort) {
-        javalin = Javalin.create(config -> {
-            configureJson(config);
-            configureCors(config);
-            configureStaticFiles(config);
-        }).start(desiredPort);
-        registerEndpoints();
-        return javalin.port();
-    }
     private void configureJson(JavalinConfig config) {
         config.jsonMapper(new JavalinJackson());
     }
+
     private void configureCors(JavalinConfig config) {
-        config.bundledPlugins.enableCors(cors -> cors.addRule(rule -> rule.allowHost("*")));
+        config.registerPlugin(new CorsPlugin(cors -> cors.addRule(rule -> rule.anyHost())));
     }
+
     private void configureStaticFiles(JavalinConfig config) {
         Path webDir = Path.of("web");
         if (Files.exists(webDir)) {
@@ -65,9 +62,26 @@ public class Server {
         }
     }
 
+    public int run(int desiredPort) {
+        javalin = Javalin.create(config -> {
+            configureJson(config);
+            configureCors(config);
+            configureStaticFiles(config);
+        }).start(desiredPort);
+
+        registerEndpoints();
+        return javalin.port();
+    }
+
     public void stop() {
         if (javalin != null) {
             javalin.stop();
         }
+    }
+
+    public static void main(String[] args) {
+        Server server = new Server();
+        int port = server.run(8080);
+        System.out.println("Server running on port " + port);
     }
 }

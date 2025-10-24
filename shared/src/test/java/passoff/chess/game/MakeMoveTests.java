@@ -1,6 +1,7 @@
 package passoff.chess.game;
 
 import chess.*;
+import model.ChessGame;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
