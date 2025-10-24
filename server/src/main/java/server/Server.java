@@ -11,6 +11,8 @@ import service.GameService;
 import service.UserService;
 import dataaccess.DataAccess;
 import dataaccess.InMemoryDataAccess;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,7 +50,9 @@ public class Server {
     }
 
     private void configureJson(JavalinConfig config) {
-        config.jsonMapper(new JavalinJackson());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        config.jsonMapper(new JavalinJackson(objectMapper, true));
     }
 
     private void configureCors(JavalinConfig config) {
@@ -78,10 +82,5 @@ public class Server {
             javalin.stop();
         }
     }
-
-    public static void main(String[] args) {
-        Server server = new Server();
-        int port = server.run(8080);
-        System.out.println("Server running on port " + port);
-    }
 }
+

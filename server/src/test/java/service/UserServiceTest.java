@@ -46,9 +46,7 @@ public class UserServiceTest {
         assertEquals("carol", lr.username());
         assertNotNull(lr.authToken());
 
-        // logout should not throw
         userService.logout(lr.authToken());
-        // after logout, token should be invalid
         assertThrows(DataAccessException.class, () -> userService.logout(lr.authToken()));
     }
 

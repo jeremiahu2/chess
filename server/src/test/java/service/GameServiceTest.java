@@ -104,7 +104,7 @@ public class GameServiceTest {
     public void joinGameBadRequest() {
         assertThrows(DataAccessException.class, () -> gameService.joinGame(token, null));
         assertThrows(DataAccessException.class, () -> gameService.joinGame(token, new JoinGameRequest("INVALID_COLOR", 1)));
-        assertThrows(DataAccessException.class, () -> gameService.joinGame(token, new JoinGameRequest("WHITE", 999))); // non-existent game
+        assertThrows(DataAccessException.class, () -> gameService.joinGame(token, new JoinGameRequest("WHITE", 999)));
     }
 
     @Test
