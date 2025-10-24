@@ -14,21 +14,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StandardAPITests {
-
     private InMemoryDataAccess dao;
     private UserService userService;
-    private GameService gameService;
-    private String token;
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         dao = new InMemoryDataAccess();
         userService = new UserService(dao);
-        gameService = new GameService(dao);
-        token = userService.register(new RegisterRequest("player1", "pw", "p1@example.com")).authToken();
     }
-
-    // === USER SERVICE TESTS ===
 
     @Test
     public void registerSuccess() throws Exception {
@@ -55,9 +48,7 @@ public class StandardAPITests {
         assertEquals("carol", lr.username());
         assertNotNull(lr.authToken());
 
-        // logout should not throw
         userService.logout(lr.authToken());
-        // after logout, token should be invalid
         assertThrows(DataAccessException.class, () -> userService.logout(lr.authToken()));
     }
 
@@ -68,8 +59,21 @@ public class StandardAPITests {
         var loginReq = new LoginRequest("dan", "wrongpw");
         assertThrows(DataAccessException.class, () -> userService.login(loginReq));
     }
+}
 
-    // === GAME SERVICE TESTS ===
+class GameServiceTest {
+    private InMemoryDataAccess dao;
+    private GameService gameService;
+    private String token;
+
+    @BeforeEach
+    public void setup() throws DataAccessException {
+        dao = new InMemoryDataAccess();
+        gameService = new GameService(dao);
+        var userService = new UserService(dao);
+        var regReq = new RegisterRequest("player1", "pw", "p1@example.com");
+        token = userService.register(regReq).authToken();
+    }
 
     @Test
     public void listGamesSuccess() throws Exception {
@@ -121,8 +125,8 @@ public class StandardAPITests {
 
     @Test
     public void joinGameSuccessBlack() throws Exception {
-        var userService2 = new UserService(dao);
-        String token2 = userService2.register(new RegisterRequest("player2", "pw", "p2@example.com")).authToken();
+        var userService = new UserService(dao);
+        String token2 = userService.register(new RegisterRequest("player2","pw","p2@example.com")).authToken();
         CreateGameRequest req = new CreateGameRequest("Match2");
         int gameID = gameService.createGame(token, req).gameID();
 
@@ -147,14 +151,13 @@ public class StandardAPITests {
     public void joinGameBadRequest() {
         assertThrows(DataAccessException.class, () -> gameService.joinGame(token, null));
         assertThrows(DataAccessException.class, () -> gameService.joinGame(token, new JoinGameRequest("INVALID_COLOR", 1)));
-        assertThrows(DataAccessException.class, () -> gameService.joinGame(token, new JoinGameRequest("WHITE", 999))); // non-existent game
+        assertThrows(DataAccessException.class, () -> gameService.joinGame(token, new JoinGameRequest("WHITE", 999)));
     }
 
     @Test
     public void joinGameUnauthorized() throws Exception {
         CreateGameRequest req = new CreateGameRequest("Match4");
         int gameID = gameService.createGame(token, req).gameID();
-
         JoinGameRequest joinReq = new JoinGameRequest("WHITE", gameID);
         assertThrows(DataAccessException.class, () -> gameService.joinGame("bad-token", joinReq));
     }
