@@ -1,6 +1,4 @@
-package model;
-
-import chess.*;
+package chess;
 
 import java.util.*;
 

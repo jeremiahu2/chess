@@ -1,5 +1,5 @@
 import chess.*;
-import model.ChessGame;
+import chess.ChessGame;
 
 public class Main {
     public static void main(String[] args) {

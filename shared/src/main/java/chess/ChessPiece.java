@@ -1,7 +1,5 @@
 package chess;
 
-import model.ChessGame;
-
 import java.util.*;
 
 /**

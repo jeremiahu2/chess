@@ -1,4 +1,4 @@
-import model.ChessGame;
+import chess.ChessGame;
 import chess.*;
 
 

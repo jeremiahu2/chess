@@ -1,7 +1,7 @@
 package passoff.chess;
 
 import chess.ChessBoard;
-import model.ChessGame;
+import chess.ChessGame;
 import chess.ChessPiece;
 import chess.ChessPosition;
 import org.junit.jupiter.api.Assertions;
