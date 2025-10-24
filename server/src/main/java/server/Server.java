@@ -44,6 +44,7 @@ public class Server {
 
     public int run(int desiredPort) {
         javalin = Javalin.create(config -> {
+            config.jsonMapper(new JavalinJackson());
             Path webDir = Path.of("web");
             if (Files.exists(webDir)) {
                 config.staticFiles.add(webDir.toString());
