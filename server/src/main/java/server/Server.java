@@ -2,6 +2,7 @@ package server;
 
 import io.javalin.Javalin;
 import io.javalin.json.JavalinJackson;
+import io.javalin.config.JavalinConfig;
 import dataaccess.InMemoryDataAccess;
 import dataaccess.DataAccess;
 import service.UserService;
@@ -44,15 +45,24 @@ public class Server {
 
     public int run(int desiredPort) {
         javalin = Javalin.create(config -> {
-            config.jsonMapper(new JavalinJackson());
-            Path webDir = Path.of("web");
-            if (Files.exists(webDir)) {
-                config.staticFiles.add(webDir.toString());
-            }
+            configureJson(config);
+            configureCors(config);
+            configureStaticFiles(config);
         }).start(desiredPort);
-
         registerEndpoints();
         return javalin.port();
+    }
+    private void configureJson(JavalinConfig config) {
+        config.jsonMapper(new JavalinJackson());
+    }
+    private void configureCors(JavalinConfig config) {
+        config.bundledPlugins.enableCors(cors -> cors.addRule(rule -> rule.allowHost("*")));
+    }
+    private void configureStaticFiles(JavalinConfig config) {
+        Path webDir = Path.of("web");
+        if (Files.exists(webDir)) {
+            config.staticFiles.add(webDir.toString());
+        }
     }
 
     public void stop() {
