@@ -30,7 +30,7 @@ public class Server {
 
         javalin.delete("/db", ctx -> {
             dao.clear();
-            ctx.status(200).json(Map.of());
+            ctx.status(200).result("{}"); // empty JSON object
         });
 
         javalin.post("/user", userHandler::register);
