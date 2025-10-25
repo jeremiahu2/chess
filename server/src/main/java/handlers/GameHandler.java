@@ -22,28 +22,21 @@ public class GameHandler {
 
     public void listGames(Context ctx) {
         try {
-            String token = ctx.header("authorization");
+            String token = HandlerUtils.getAuthToken(ctx);
             if (token == null || token.isEmpty()) {
                 ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
                 return;
             }
             List<GameData> games = gameService.listGames(token);
             ctx.status(200).result(gson.toJson(Map.of("games", games)));
-        } catch (DataAccessException e) {
-            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
-            if (msg.contains("unauthorized")) {
-                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
-            } else {
-                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
-            }
         } catch (Exception e) {
-            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+            HandlerUtils.handleException(ctx, e);
         }
     }
 
     public void createGame(Context ctx) {
         try {
-            String token = ctx.header("authorization");
+            String token = HandlerUtils.getAuthToken(ctx);
             if (token == null || token.isEmpty()) {
                 ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
                 return;
@@ -55,23 +48,14 @@ public class GameHandler {
             }
             CreateGameResult res = gameService.createGame(token, req);
             ctx.status(200).result(gson.toJson(res));
-        } catch (DataAccessException e) {
-            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
-            if (msg.contains("unauthorized")) {
-                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
-            } else if (msg.contains("bad")) {
-                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
-            } else {
-                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
-            }
         } catch (Exception e) {
-            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+            HandlerUtils.handleException(ctx, e);
         }
     }
 
     public void joinGame(Context ctx) {
         try {
-            String token = ctx.header("authorization");
+            String token = HandlerUtils.getAuthToken(ctx);
             if (token == null || token.isEmpty()) {
                 ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
                 return;
@@ -83,19 +67,8 @@ public class GameHandler {
             }
             gameService.joinGame(token, req);
             ctx.status(200).result(gson.toJson(Map.of()));
-        } catch (DataAccessException e) {
-            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
-            if (msg.contains("unauthorized")) {
-                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
-            } else if (msg.contains("taken")) {
-                ctx.status(403).result(gson.toJson(Map.of("message", "Error: already taken")));
-            } else if (msg.contains("bad")) {
-                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
-            } else {
-                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
-            }
         } catch (Exception e) {
-            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+            HandlerUtils.handleException(ctx, e);
         }
     }
 }

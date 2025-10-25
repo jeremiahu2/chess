@@ -5,7 +5,6 @@ import io.javalin.http.Context;
 import service.UserService;
 import service.requests.LoginRequest;
 import service.results.LoginResult;
-import dataaccess.DataAccessException;
 
 import java.util.Map;
 
@@ -26,38 +25,23 @@ public class SessionHandler {
             }
             LoginResult res = userService.login(req);
             ctx.status(200).result(gson.toJson(res));
-        } catch (DataAccessException e) {
-            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
-            if (msg.contains("bad")) {
-                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
-            } else if (msg.contains("unauthorized")) {
-                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
-            } else {
-                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
-            }
         } catch (Exception e) {
-            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+            HandlerUtils.handleException(ctx, e);
         }
     }
 
     public void logout(Context ctx) {
         try {
-            String token = ctx.header("authorization");
+            String token = HandlerUtils.getAuthToken(ctx);
             if (token == null || token.isEmpty()) {
                 ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
                 return;
             }
             userService.logout(token);
             ctx.status(200).result(gson.toJson(Map.of()));
-        } catch (DataAccessException e) {
-            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
-            if (msg.contains("unauthorized")) {
-                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
-            } else {
-                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
-            }
         } catch (Exception e) {
-            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+            HandlerUtils.handleException(ctx, e);
         }
     }
 }
+
