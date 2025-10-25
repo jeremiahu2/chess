@@ -5,7 +5,7 @@ import io.javalin.http.Context;
 import java.util.Map;
 
 public class HandlerUtils {
-    private static final Gson gson = new Gson();
+    private static final Gson GSON = new Gson();
 
     public static String getAuthToken(Context ctx) {
         return ctx.header("authorization");
@@ -25,6 +25,6 @@ public class HandlerUtils {
             status = 403;
             message = "Error: already taken";
         }
-        ctx.status(status).result(gson.toJson(Map.of("message", message)));
+        ctx.status(status).result(GSON.toJson(Map.of("message", message)));
     }
 }
