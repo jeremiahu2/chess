@@ -1,6 +1,7 @@
 package server;
 
 import io.javalin.Javalin;
+import io.javalin.json.JavalinJackson;
 import handlers.GameHandler;
 import handlers.SessionHandler;
 import handlers.UserHandler;
@@ -42,7 +43,10 @@ public class Server {
     }
 
     public int run(int desiredPort) {
-        javalin = Javalin.create().start(desiredPort);
+        javalin = Javalin.create(config -> {
+            config.jsonMapper(new JavalinJackson());
+            config.staticFiles.add("web");
+        }).start(desiredPort);
         registerEndpoints();
         return javalin.port();
     }
