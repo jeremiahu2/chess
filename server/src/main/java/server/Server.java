@@ -9,6 +9,7 @@ import service.UserService;
 import dataaccess.DataAccess;
 import dataaccess.InMemoryDataAccess;
 import java.util.Map;
+import com.google.gson.Gson;
 
 public class Server {
 
@@ -16,6 +17,7 @@ public class Server {
     private final DataAccess dao;
     private final UserService userService;
     private final GameService gameService;
+    private final Gson gson = new Gson();
 
     public Server() {
         this.dao = new InMemoryDataAccess();
@@ -30,7 +32,7 @@ public class Server {
 
         javalin.delete("/db", ctx -> {
             dao.clear();
-            ctx.status(200).json(Map.of());
+            ctx.status(200).result(gson.toJson(Map.of()));
         });
 
         javalin.post("/user", userHandler::register);
@@ -43,8 +45,13 @@ public class Server {
 
     public int run(int desiredPort) {
         javalin = Javalin.create(config -> {
-            config.staticFiles.add("/web");
+            config.staticFiles.add(staticFileConfig -> {
+                staticFileConfig.directory = "/web";
+                staticFileConfig.hostedPath = "/";
+                staticFileConfig.location = io.javalin.http.staticfiles.Location.CLASSPATH;
+            });
         }).start(desiredPort);
+
         registerEndpoints();
         return javalin.port();
     }
