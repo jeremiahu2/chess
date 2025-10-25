@@ -30,7 +30,7 @@ public class Server {
 
         javalin.delete("/db", ctx -> {
             dao.clear();
-            ctx.status(200).result("{}"); // empty JSON object
+            ctx.status(200).json(Map.of());
         });
 
         javalin.post("/user", userHandler::register);
@@ -43,11 +43,7 @@ public class Server {
 
     public int run(int desiredPort) {
         javalin = Javalin.create(config -> {
-            config.staticFiles.add(staticFiles -> {
-                staticFiles.hostedPath = "/";
-                staticFiles.directory = "web";
-            });
-
+            config.staticFiles.add("/web");
         }).start(desiredPort);
         registerEndpoints();
         return javalin.port();
