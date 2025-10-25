@@ -24,20 +24,20 @@ public class GameHandler {
         try {
             String token = ctx.header("authorization");
             if (token == null || token.isEmpty()) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
                 return;
             }
             List<GameData> games = gameService.listGames(token);
-            ctx.status(200).json(Map.of("games", games));
+            ctx.status(200).result(gson.toJson(Map.of("games", games)));
         } catch (DataAccessException e) {
             String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
             if (msg.contains("unauthorized")) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
             } else {
-                ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 
@@ -45,27 +45,27 @@ public class GameHandler {
         try {
             String token = ctx.header("authorization");
             if (token == null || token.isEmpty()) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
                 return;
             }
             CreateGameRequest req = gson.fromJson(ctx.body(), CreateGameRequest.class);
             if (req == null || req.gameName() == null) {
-                ctx.status(400).json(Map.of("message", "Error: bad request"));
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
             CreateGameResult res = gameService.createGame(token, req);
-            ctx.status(200).json(res);
+            ctx.status(200).result(gson.toJson(res));
         } catch (DataAccessException e) {
             String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
             if (msg.contains("unauthorized")) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
             } else if (msg.contains("bad")) {
-                ctx.status(400).json(Map.of("message", "Error: bad request"));
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
             } else {
-                ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 
@@ -73,29 +73,29 @@ public class GameHandler {
         try {
             String token = ctx.header("authorization");
             if (token == null || token.isEmpty()) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
                 return;
             }
             JoinGameRequest req = gson.fromJson(ctx.body(), JoinGameRequest.class);
             if (req == null || req.gameID() == 0) {
-                ctx.status(400).json(Map.of("message", "Error: bad request"));
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
             gameService.joinGame(token, req);
-            ctx.status(200).json(Map.of());
+            ctx.status(200).result(gson.toJson(Map.of()));
         } catch (DataAccessException e) {
             String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
             if (msg.contains("unauthorized")) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
             } else if (msg.contains("taken")) {
-                ctx.status(403).json(Map.of("message", "Error: already taken"));
+                ctx.status(403).result(gson.toJson(Map.of("message", "Error: already taken")));
             } else if (msg.contains("bad")) {
-                ctx.status(400).json(Map.of("message", "Error: bad request"));
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
             } else {
-                ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 }

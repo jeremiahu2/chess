@@ -21,22 +21,22 @@ public class SessionHandler {
         try {
             LoginRequest req = gson.fromJson(ctx.body(), LoginRequest.class);
             if (req == null || req.username() == null || req.password() == null) {
-                ctx.status(400).json(Map.of("message", "Error: bad request"));
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
             LoginResult res = userService.login(req);
-            ctx.status(200).json(res);
+            ctx.status(200).result(gson.toJson(res));
         } catch (DataAccessException e) {
             String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
             if (msg.contains("bad")) {
-                ctx.status(400).json(Map.of("message", "Error: bad request"));
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
             } else if (msg.contains("unauthorized")) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
             } else {
-                ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 
@@ -44,20 +44,20 @@ public class SessionHandler {
         try {
             String token = ctx.header("authorization");
             if (token == null || token.isEmpty()) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
                 return;
             }
             userService.logout(token);
-            ctx.status(200).json(Map.of());
+            ctx.status(200).result(gson.toJson(Map.of()));
         } catch (DataAccessException e) {
             String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
             if (msg.contains("unauthorized")) {
-                ctx.status(401).json(Map.of("message", "Error: unauthorized"));
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
             } else {
-                ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 }

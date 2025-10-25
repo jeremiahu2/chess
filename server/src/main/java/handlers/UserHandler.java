@@ -21,22 +21,22 @@ public class UserHandler {
         try {
             RegisterRequest req = gson.fromJson(ctx.body(), RegisterRequest.class);
             if (req == null || req.username() == null || req.password() == null || req.email() == null) {
-                ctx.status(400).json(Map.of("message", "Error: bad request"));
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
             RegisterResult res = userService.register(req);
-            ctx.status(200).json(res);
+            ctx.status(200).result(gson.toJson(res));
         } catch (DataAccessException e) {
             String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
             if (msg.contains("already") || msg.contains("taken")) {
-                ctx.status(403).json(Map.of("message", "Error: already taken"));
+                ctx.status(403).result(gson.toJson(Map.of("message", "Error: already taken")));
             } else if (msg.contains("bad") || msg.contains("request")) {
-                ctx.status(400).json(Map.of("message", "Error: bad request"));
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
             } else {
-                ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("message", "Error: " + e.getMessage()));
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 }
