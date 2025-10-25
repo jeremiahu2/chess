@@ -43,7 +43,11 @@ public class Server {
 
     public int run(int desiredPort) {
         javalin = Javalin.create(config -> {
-            config.staticFiles.add("web");
+            config.staticFiles.add(staticFiles -> {
+                staticFiles.hostedPath = "/";
+                staticFiles.directory = "web";
+            });
+
         }).start(desiredPort);
         registerEndpoints();
         return javalin.port();
