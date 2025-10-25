@@ -1,8 +1,6 @@
 package server;
 
 import io.javalin.Javalin;
-import io.javalin.config.JavalinConfig;
-import io.javalin.json.JavalinJackson;
 import handlers.GameHandler;
 import handlers.SessionHandler;
 import handlers.UserHandler;
@@ -10,10 +8,6 @@ import service.GameService;
 import service.UserService;
 import dataaccess.DataAccess;
 import dataaccess.InMemoryDataAccess;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Map;
 
 public class Server {
@@ -47,30 +41,8 @@ public class Server {
         javalin.put("/game", gameHandler::joinGame);
     }
 
-    private void configureJson(JavalinConfig config) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        config.jsonMapper(new JavalinJackson(objectMapper));
-    }
-
-    private void configureCors(JavalinConfig config) {
-        config.plugins.enableCors(cors -> cors.add(it -> it.anyHost()));
-    }
-
-    private void configureStaticFiles(JavalinConfig config) {
-        Path webDir = Path.of("web");
-        if (Files.exists(webDir)) {
-            config.staticFiles.add(webDir.toString());
-        }
-    }
-
     public int run(int desiredPort) {
-        javalin = Javalin.create(config -> {
-            configureJson(config);
-            configureCors(config);
-            configureStaticFiles(config);
-        }).start(desiredPort);
-
+        javalin = Javalin.create().start(desiredPort);
         registerEndpoints();
         return javalin.port();
     }
@@ -81,4 +53,3 @@ public class Server {
         }
     }
 }
-
