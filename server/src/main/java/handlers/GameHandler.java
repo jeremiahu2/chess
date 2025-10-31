@@ -6,7 +6,6 @@ import service.GameService;
 import service.requests.CreateGameRequest;
 import service.requests.JoinGameRequest;
 import service.results.CreateGameResult;
-import dataaccess.DataAccessException;
 import model.GameData;
 
 import java.util.List;
@@ -30,6 +29,7 @@ public class GameHandler {
             List<GameData> games = gameService.listGames(token);
             ctx.status(200).result(gson.toJson(Map.of("games", games)));
         } catch (Exception e) {
+            // keep existing behavior
             HandlerUtils.handleException(ctx, e);
         }
     }
@@ -49,6 +49,7 @@ public class GameHandler {
             CreateGameResult res = gameService.createGame(token, req);
             ctx.status(200).result(gson.toJson(res));
         } catch (Exception e) {
+            // keep existing behavior
             HandlerUtils.handleException(ctx, e);
         }
     }
@@ -68,7 +69,10 @@ public class GameHandler {
             gameService.joinGame(token, req);
             ctx.status(200).result(gson.toJson(Map.of()));
         } catch (Exception e) {
+            // keep existing behavior
             HandlerUtils.handleException(ctx, e);
         }
     }
 }
+
+

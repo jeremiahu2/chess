@@ -18,9 +18,11 @@ public class ClearHandler {
     public void clear(Context ctx) {
         try {
             clearService.clear();
-            ctx.status(200).result(gson.toJson(Map.of())); // return empty JSON object
+            ctx.status(200).result(gson.toJson(Map.of()));
         } catch (DataAccessException e) {
-            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: database failure")));
+        } catch (Exception e) {
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: internal server error")));
         }
     }
 }

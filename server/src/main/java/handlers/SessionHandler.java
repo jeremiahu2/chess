@@ -5,6 +5,7 @@ import io.javalin.http.Context;
 import service.UserService;
 import service.requests.LoginRequest;
 import service.results.LoginResult;
+import dataaccess.DataAccessException;
 
 import java.util.Map;
 
@@ -25,8 +26,15 @@ public class SessionHandler {
             }
             LoginResult res = userService.login(req);
             ctx.status(200).result(gson.toJson(res));
+        } catch (DataAccessException e) {
+            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+            if (msg.contains("sql") || e.getCause() != null) {
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: database failure")));
+            } else {
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
+            }
         } catch (Exception e) {
-            HandlerUtils.handleException(ctx, e);
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: internal server error")));
         }
     }
 
@@ -39,8 +47,15 @@ public class SessionHandler {
             }
             userService.logout(token);
             ctx.status(200).result(gson.toJson(Map.of()));
+        } catch (DataAccessException e) {
+            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+            if (msg.contains("sql") || e.getCause() != null) {
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: database failure")));
+            } else {
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
+            }
         } catch (Exception e) {
-            HandlerUtils.handleException(ctx, e);
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: internal server error")));
         }
     }
 }
