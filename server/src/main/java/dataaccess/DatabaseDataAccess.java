@@ -3,12 +3,11 @@ package dataaccess;
 import model.UserData;
 import model.GameData;
 import model.AuthData;
-import org.mindrot.jbcrypt.BCrypt;
-import java.sql.*;
-import java.util.*;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.sql.*;
+import java.util.*;
 
 public class DatabaseDataAccess implements DataAccess {
     private final Gson gson = new GsonBuilder().create();
@@ -17,9 +16,9 @@ public class DatabaseDataAccess implements DataAccess {
     public void clear() throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate("DELETE FROM user");
             stmt.executeUpdate("DELETE FROM auth_token");
             stmt.executeUpdate("DELETE FROM game");
+            stmt.executeUpdate("DELETE FROM user");
         } catch (SQLException e) {
             throw new DataAccessException("Error clearing database", e);
         }
@@ -32,14 +31,13 @@ public class DatabaseDataAccess implements DataAccess {
         }
 
         String sql = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
-        String hashedPassword = BCrypt.hashpw(u.password(), BCrypt.gensalt());
         String emailValue = (u.email() != null) ? u.email() : "";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, u.username());
-            stmt.setString(2, hashedPassword);
+            stmt.setString(2, u.password());
             stmt.setString(3, emailValue);
 
             int rows = stmt.executeUpdate();
@@ -113,13 +111,11 @@ public class DatabaseDataAccess implements DataAccess {
         String sql = "DELETE FROM auth_token WHERE token = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, token);
             int rows = stmt.executeUpdate();
             if (rows == 0) {
                 throw new DataAccessException("Auth token not found");
             }
-
         } catch (SQLException e) {
             throw new DataAccessException("Error deleting auth", e);
         }

@@ -24,9 +24,19 @@ public class SessionHandler {
                 return;
             }
             LoginResult res = userService.login(req);
-            ctx.status(200).result(gson.toJson(res));
+            ctx.status(200).result(gson.toJson(Map.of(
+                    "username", res.username(),
+                    "authToken", res.authToken()
+            )));
         } catch (DataAccessException e) {
-            ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
+            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+            if (msg.contains("unauthorized")) {
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
+            } else if (msg.contains("bad request")) {
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
+            } else {
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+            }
         } catch (Exception e) {
             HandlerUtils.handleException(ctx, e);
         }
@@ -42,7 +52,14 @@ public class SessionHandler {
             userService.logout(token);
             ctx.status(200).result(gson.toJson(Map.of()));
         } catch (DataAccessException e) {
-            ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
+            String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+            if (msg.contains("unauthorized") || msg.contains("auth token")) {
+                ctx.status(401).result(gson.toJson(Map.of("message", "Error: unauthorized")));
+            } else if (msg.contains("bad request")) {
+                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
+            } else {
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
+            }
         } catch (Exception e) {
             HandlerUtils.handleException(ctx, e);
         }

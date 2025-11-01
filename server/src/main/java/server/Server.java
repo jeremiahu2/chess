@@ -23,7 +23,7 @@ public class Server {
     public Server() {
         DataAccess tempDao;
         try {
-            DatabaseManager.createDatabase();
+            DatabaseManager.initialize();
             tempDao = new DatabaseDataAccess();
         } catch (DataAccessException e) {
             System.err.println("Warning: Failed to create database — running in memory mode.");

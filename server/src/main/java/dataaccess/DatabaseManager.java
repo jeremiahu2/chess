@@ -1,6 +1,9 @@
 package dataaccess;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class DatabaseManager {
@@ -9,19 +12,18 @@ public class DatabaseManager {
     private static String dbPassword;
     private static String connectionUrl;
 
-    /*
-     * Load the database information for the db.properties file.
-     */
     static {
         loadPropertiesFromResources();
     }
 
-    /**
-     * Creates the database if it does not already exist.
-     */
-    static public void createDatabase() throws DataAccessException {
+    public static void initialize() throws DataAccessException {
+        createDatabase();
+        createTables();
+    }
+
+    static void createDatabase() throws DataAccessException {
         var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
-        try (var conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
+        try (var conn = DriverManager.getConnection(connectionUrl.replace("/" + databaseName, ""), dbUsername, dbPassword);
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -29,22 +31,42 @@ public class DatabaseManager {
         }
     }
 
-    /**
-     * Create a connection to the database and sets the catalog based upon the
-     * properties specified in db.properties. Connections to the database should
-     * be short-lived, and you must close the connection when you are done with it.
-     * The easiest way to do that is with a try-with-resource block.
-     * <br/>
-     * <code>
-     * try (var conn = DatabaseManager.getConnection()) {
-     * // execute SQL statements.
-     * }
-     * </code>
-     */
+    private static void createTables() throws DataAccessException {
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS user (
+                    username VARCHAR(255) PRIMARY KEY,
+                    password VARCHAR(255) NOT NULL,
+                    email VARCHAR(255) NOT NULL
+                )
+            """);
+            stmt.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS auth_token (
+                    token VARCHAR(255) PRIMARY KEY,
+                    username VARCHAR(255) NOT NULL,
+                    FOREIGN KEY (username) REFERENCES user(username)
+                )
+            """);
+            stmt.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS game (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    gameName VARCHAR(255) NOT NULL,
+                    whiteUsername VARCHAR(255),
+                    blackUsername VARCHAR(255),
+                    game TEXT,
+                    FOREIGN KEY (whiteUsername) REFERENCES user(username),
+                    FOREIGN KEY (blackUsername) REFERENCES user(username)
+                )
+            """);
+        } catch (SQLException e) {
+            throw new DataAccessException("Error creating tables", e);
+        }
+    }
+
     static Connection getConnection() throws DataAccessException {
         try {
-            var conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
-            return conn;
+            return DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
         } catch (SQLException ex) {
             throw new DataAccessException("failed to get connection", ex);
         }
