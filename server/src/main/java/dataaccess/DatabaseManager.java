@@ -51,7 +51,7 @@ public class DatabaseManager {
             stmt.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS game (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    gameName VARCHAR(255) NOT NULL,
+                    gameName VARCHAR(255) DEFAULT 'Untitled',
                     whiteUsername VARCHAR(255),
                     blackUsername VARCHAR(255),
                     gameState TEXT,
