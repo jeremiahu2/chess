@@ -8,14 +8,14 @@ import java.util.Optional;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Auth_TokenDAOTest {
+public class AuthTokenDAOTest {
 
-    private Auth_TokenDAO authDAO;
+    private AuthTokenDAO authDAO;
     private UserDAO userDAO;
 
     @BeforeEach
     public void setUp() throws DataAccessException {
-        authDAO = new Auth_TokenDAO();
+        authDAO = new AuthTokenDAO();
         userDAO = new UserDAO();
         authDAO.clear();
         userDAO.clear();
@@ -26,7 +26,7 @@ public class Auth_TokenDAOTest {
     }
 
     @Test
-    public void createAndGetAuth_success() throws DataAccessException {
+    public void createAndGetAuthSuccess() throws DataAccessException {
         String token = UUID.randomUUID().toString();
         AuthData auth = new AuthData(token, "alice");
         authDAO.createAuth(auth);
@@ -36,13 +36,13 @@ public class Auth_TokenDAOTest {
     }
 
     @Test
-    public void getAuth_notFound_returnsEmpty() throws DataAccessException {
+    public void getAuthNotFoundReturnsEmpty() throws DataAccessException {
         Optional<AuthData> result = authDAO.getAuth("nonexistent");
         assertTrue(result.isEmpty(), "Nonexistent token should return empty");
     }
 
     @Test
-    public void deleteAuth_removesToken() throws DataAccessException {
+    public void deleteAuthRemovesToken() throws DataAccessException {
         String token = UUID.randomUUID().toString();
         authDAO.createAuth(new AuthData(token, "bob"));
         authDAO.deleteAuth(token);
@@ -51,7 +51,7 @@ public class Auth_TokenDAOTest {
     }
 
     @Test
-    public void clear_removesAllTokens() throws DataAccessException {
+    public void clearRemovesAllTokens() throws DataAccessException {
         authDAO.createAuth(new AuthData(UUID.randomUUID().toString(), "u1"));
         authDAO.createAuth(new AuthData(UUID.randomUUID().toString(), "u2"));
         authDAO.clear();

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class Auth_TokenDAO {
+public class AuthTokenDAO {
 
     public void createAuth(AuthData auth_token) throws DataAccessException {
         String sql = "INSERT INTO auth_token (token, username) VALUES (?, ?)";

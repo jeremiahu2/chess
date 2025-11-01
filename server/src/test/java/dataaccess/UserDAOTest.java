@@ -18,7 +18,7 @@ public class UserDAOTest {
     }
 
     @Test
-    public void createAndGetUser_success() throws DataAccessException {
+    public void createAndGetUserSuccess() throws DataAccessException {
         UserData user = new UserData("alice", "password123", "alice@example.com");
         userDAO.createUser(user);
         Optional<UserData> retrieved = userDAO.getUser("alice");
@@ -31,7 +31,7 @@ public class UserDAOTest {
     }
 
     @Test
-    public void createUser_duplicate_throwsException() throws DataAccessException {
+    public void createUserDuplicateThrowsException() throws DataAccessException {
         UserData user = new UserData("bob", "pass", "b@b.com");
         userDAO.createUser(user);
         assertThrows(DataAccessException.class, () -> userDAO.createUser(user),
@@ -39,7 +39,7 @@ public class UserDAOTest {
     }
 
     @Test
-    public void clear_removesAllUsers() throws DataAccessException {
+    public void clearRemovesAllUsers() throws DataAccessException {
         userDAO.createUser(new UserData("chris", "pw", "c@c.com"));
         userDAO.clear();
 

@@ -52,11 +52,4 @@ public class UserDAO {
             throw new DataAccessException("Error clearing users", e);
         }
     }
-
-    public boolean verifyPassword(String username, String password) throws DataAccessException {
-        Optional<UserData> userOpt = getUser(username);
-        if (userOpt.isEmpty()) return false;
-        String storedHash = userOpt.get().password();
-        return BCrypt.checkpw(password, storedHash);
-    }
 }

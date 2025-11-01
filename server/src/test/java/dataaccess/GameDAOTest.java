@@ -22,7 +22,7 @@ public class GameDAOTest {
     }
 
     @Test
-    public void createAndGetGame_success() throws DataAccessException {
+    public void createAndGetGameSuccess() throws DataAccessException {
         GameData game = new GameData(1, "whitePlayer", "blackPlayer", "open", null);
         gameDAO.createGame(game);
         Optional<GameData> result = gameDAO.getGame(1);
@@ -32,7 +32,7 @@ public class GameDAOTest {
     }
 
     @Test
-    public void updateGame_success() throws DataAccessException {
+    public void updateGameSuccess() throws DataAccessException {
         GameData game = new GameData(2, "w", "b", "open", null);
         gameDAO.createGame(game);
         GameData updated = new GameData(2, "w", "b", "closed", null);
@@ -43,7 +43,7 @@ public class GameDAOTest {
     }
 
     @Test
-    public void listGames_returnsAll() throws DataAccessException {
+    public void listGamesReturnsAll() throws DataAccessException {
         gameDAO.createGame(new GameData(10, "a", "b", "g1", null));
         gameDAO.createGame(new GameData(11, "x", "y", "g2", null));
         List<GameData> games = gameDAO.listGames();
@@ -51,7 +51,7 @@ public class GameDAOTest {
     }
 
     @Test
-    public void clear_removesAllGames() throws DataAccessException {
+    public void clearRemovesAllGames() throws DataAccessException {
         gameDAO.createGame(new GameData(3, "p1", "p2", "g3", null));
         gameDAO.clear();
         Optional<GameData> result = gameDAO.getGame(3);
