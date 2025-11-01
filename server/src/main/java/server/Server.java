@@ -43,7 +43,6 @@ public class Server {
         SessionHandler sessionHandler = new SessionHandler(userService);
         GameHandler gameHandler = new GameHandler(gameService);
         ClearHandler clearHandler = new ClearHandler(clearService);
-
         javalin.delete("/db", clearHandler::clear);
         javalin.post("/user", userHandler::register);
         javalin.post("/session", sessionHandler::login);
