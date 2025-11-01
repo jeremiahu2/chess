@@ -54,10 +54,10 @@ public class DatabaseManager {
                     gameName VARCHAR(255) NOT NULL,
                     whiteUsername VARCHAR(255),
                     blackUsername VARCHAR(255),
-                    game TEXT,
+                    gameState TEXT,
                     FOREIGN KEY (whiteUsername) REFERENCES user(username),
                     FOREIGN KEY (blackUsername) REFERENCES user(username)
-                )
+                 )
             """);
         } catch (SQLException e) {
             throw new DataAccessException("Error creating tables", e);
