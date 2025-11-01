@@ -12,7 +12,9 @@ public class HandlerUtils {
     }
 
     public static void handleException(Context ctx, Exception e) {
-        if (ctx == null) return;
+        if (ctx == null) {
+            return;
+        }
         String rawMessage = (e != null && e.getMessage() != null) ? e.getMessage() : "";
         String msg = rawMessage.toLowerCase();
         int status = 500;

@@ -28,11 +28,11 @@ public class AuthTokenDAO {
             stmt.setString(1, token);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                AuthData auth_token = new AuthData(
+                AuthData authToken = new AuthData(
                         rs.getString("token"),
                         rs.getString("username")
                 );
-                return Optional.of(auth_token);
+                return Optional.of(authToken);
             }
             return Optional.empty();
         } catch (SQLException e) {
