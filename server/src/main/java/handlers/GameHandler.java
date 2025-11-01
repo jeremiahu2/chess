@@ -41,7 +41,7 @@ public class GameHandler {
                 return;
             }
             CreateGameRequest req = gson.fromJson(ctx.body(), CreateGameRequest.class);
-            if (req == null || req.gameName() == null || req.gameName().isEmpty()) {
+            if (req == null || req.gameName() == null) {
                 ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
@@ -60,7 +60,7 @@ public class GameHandler {
                 return;
             }
             JoinGameRequest req = gson.fromJson(ctx.body(), JoinGameRequest.class);
-            if (req == null || req.gameID() <= 0) {
+            if (req == null || req.gameID() == 0) {
                 ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
