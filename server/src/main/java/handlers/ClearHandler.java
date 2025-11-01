@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ClearHandler {
     private final ClearService clearService;
-    private static final Gson GSON = new Gson();
+    private static final GSON gson = new Gson();
 
     public ClearHandler(ClearService clearService) {
         this.clearService = clearService;
