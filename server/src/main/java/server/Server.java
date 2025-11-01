@@ -1,5 +1,6 @@
 package server;
 
+import dataaccess.*;
 import io.javalin.Javalin;
 import handlers.GameHandler;
 import handlers.SessionHandler;
@@ -8,10 +9,6 @@ import handlers.ClearHandler;
 import service.GameService;
 import service.UserService;
 import service.ClearService;
-import dataaccess.DataAccess;
-import dataaccess.InMemoryDataAccess;
-import dataaccess.DatabaseManager;
-import dataaccess.DataAccessException;
 import com.google.gson.Gson;
 
 public class Server {
@@ -27,7 +24,7 @@ public class Server {
         DataAccess tempDao;
         try {
             DatabaseManager.createDatabase();
-            tempDao = new InMemoryDataAccess();
+            tempDao = new DatabaseDataAccess();
         } catch (DataAccessException e) {
             System.err.println("Warning: Failed to create database — running in memory mode.");
             tempDao = new InMemoryDataAccess();
