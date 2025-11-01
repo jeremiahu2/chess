@@ -12,9 +12,11 @@ public class HandlerUtils {
     }
 
     public static void handleException(Context ctx, Exception e) {
-        String msg = (e.getMessage() != null) ? e.getMessage().toLowerCase() : "";
+        if (ctx == null) return;
+        String rawMessage = (e != null && e.getMessage() != null) ? e.getMessage() : "";
+        String msg = rawMessage.toLowerCase();
         int status = 500;
-        String message = "Error: " + e.getMessage();
+        String message = "Error: " + rawMessage;
         if (msg.contains("unauthorized")) {
             status = 401;
             message = "Error: unauthorized";
@@ -25,6 +27,10 @@ public class HandlerUtils {
             status = 403;
             message = "Error: already taken";
         }
-        ctx.status(status).result(GSON.toJson(Map.of("message", message)));
+        try {
+            ctx.status(status).result(GSON.toJson(Map.of("message", message)));
+        } catch (Exception inner) {
+            System.err.println("Failed to handle exception: " + inner.getMessage());
+        }
     }
 }

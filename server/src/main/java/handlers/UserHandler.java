@@ -6,7 +6,6 @@ import service.UserService;
 import service.requests.RegisterRequest;
 import service.results.RegisterResult;
 import dataaccess.DataAccessException;
-
 import java.util.Map;
 
 public class UserHandler {
@@ -30,13 +29,11 @@ public class UserHandler {
             String msg = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
             if (msg.contains("already")) {
                 ctx.status(403).result(gson.toJson(Map.of("message", "Error: already taken")));
-            } else if (msg.contains("sql") || e.getCause() != null) {
-                ctx.status(500).result(gson.toJson(Map.of("message", "Error: database failure")));
             } else {
-                ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
+                ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
             }
         } catch (Exception e) {
-            ctx.status(500).result(gson.toJson(Map.of("message", "Error: internal server error")));
+            ctx.status(500).result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 }

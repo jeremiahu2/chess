@@ -29,7 +29,6 @@ public class GameHandler {
             List<GameData> games = gameService.listGames(token);
             ctx.status(200).result(gson.toJson(Map.of("games", games)));
         } catch (Exception e) {
-            // keep existing behavior
             HandlerUtils.handleException(ctx, e);
         }
     }
@@ -42,14 +41,13 @@ public class GameHandler {
                 return;
             }
             CreateGameRequest req = gson.fromJson(ctx.body(), CreateGameRequest.class);
-            if (req == null || req.gameName() == null) {
+            if (req == null || req.gameName() == null || req.gameName().isEmpty()) {
                 ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
             CreateGameResult res = gameService.createGame(token, req);
             ctx.status(200).result(gson.toJson(res));
         } catch (Exception e) {
-            // keep existing behavior
             HandlerUtils.handleException(ctx, e);
         }
     }
@@ -62,17 +60,14 @@ public class GameHandler {
                 return;
             }
             JoinGameRequest req = gson.fromJson(ctx.body(), JoinGameRequest.class);
-            if (req == null || req.gameID() == 0) {
+            if (req == null || req.gameID() <= 0) {
                 ctx.status(400).result(gson.toJson(Map.of("message", "Error: bad request")));
                 return;
             }
             gameService.joinGame(token, req);
             ctx.status(200).result(gson.toJson(Map.of()));
         } catch (Exception e) {
-            // keep existing behavior
             HandlerUtils.handleException(ctx, e);
         }
     }
 }
-
-
