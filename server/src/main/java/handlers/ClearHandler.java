@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ClearHandler {
     private final ClearService clearService;
-    private static final GSON gson = new Gson();
+    private static final Gson GSON = new Gson();
 
     public ClearHandler(ClearService clearService) {
         this.clearService = clearService;
@@ -16,7 +16,7 @@ public class ClearHandler {
     public void clear(Context ctx) {
         try {
             clearService.clear();
-            ctx.status(200).result(gson.toJson(Map.of()));
+            ctx.status(200).result(GSON.toJson(Map.of()));
         } catch (Exception e) {
             HandlerUtils.handleException(ctx, e);
         }
