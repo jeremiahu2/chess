@@ -9,12 +9,12 @@ import java.util.Optional;
 
 public class AuthTokenDAO {
 
-    public void createAuth(AuthData auth_token) throws DataAccessException {
+    public void createAuth(AuthData authToken) throws DataAccessException {
         String sql = "INSERT INTO auth_token (token, username) VALUES (?, ?)";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, auth_token.authToken());
-            stmt.setString(2, auth_token.username());
+            stmt.setString(1, authToken.authToken());
+            stmt.setString(2, authToken.username());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Error creating auth token", e);
@@ -28,11 +28,11 @@ public class AuthTokenDAO {
             stmt.setString(1, token);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                AuthData auth_token = new AuthData(
+                AuthData authToken = new AuthData(
                         rs.getString("token"),
                         rs.getString("username")
                 );
-                return Optional.of(auth_token);
+                return Optional.of(authToken);
             }
             return Optional.empty();
         } catch (SQLException e) {
