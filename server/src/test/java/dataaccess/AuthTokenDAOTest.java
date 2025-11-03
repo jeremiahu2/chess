@@ -73,4 +73,10 @@ public class AuthTokenDAOTest {
         assertDoesNotThrow(() -> authDAO.deleteAuth("not-a-token"),
                 "Deleting nonexistent token should not throw an exception");
     }
+
+    @Test
+    public void clearEmptyTable() throws DataAccessException {
+        authDAO.clear();
+        assertDoesNotThrow(() -> authDAO.clear(), "Clearing an already empty table should not throw");
+    }
 }
