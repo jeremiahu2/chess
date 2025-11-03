@@ -58,4 +58,19 @@ public class AuthTokenDAOTest {
         Optional<AuthData> result1 = authDAO.getAuth("anything");
         assertTrue(result1.isEmpty(), "Auth table should be empty after clear()");
     }
+
+    @Test
+    public void createDuplicate() throws DataAccessException {
+        String token = UUID.randomUUID().toString();
+        AuthData auth = new AuthData(token, "alice");
+        authDAO.createAuth(auth);
+        assertThrows(DataAccessException.class, () -> authDAO.createAuth(auth),
+                "Creating duplicate auth token should throw DataAccessException");
+    }
+
+    @Test
+    public void deleteNonexistent() {
+        assertDoesNotThrow(() -> authDAO.deleteAuth("not-a-token"),
+                "Deleting nonexistent token should not throw an exception");
+    }
 }
