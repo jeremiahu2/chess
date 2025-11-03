@@ -57,4 +57,25 @@ public class GameDAOTest {
         Optional<GameData> result = gameDAO.getGame(3);
         assertTrue(result.isEmpty());
     }
+
+    @Test
+    public void createDuplicate() throws DataAccessException {
+        GameData game = new GameData(1, "p1", "p2", "g1", null);
+        gameDAO.createGame(game);
+        assertThrows(DataAccessException.class, () -> gameDAO.createGame(game),
+                "Creating duplicate game ID should throw DataAccessException");
+    }
+
+    @Test
+    public void gameNotFound() throws DataAccessException {
+        Optional<GameData> result = gameDAO.getGame(999);
+        assertTrue(result.isEmpty(), "Getting nonexistent game should return empty");
+    }
+
+    @Test
+    public void updateNonexistent() {
+        GameData fakeGame = new GameData(999, "x", "y", "ghost", null);
+        assertDoesNotThrow(() -> gameDAO.updateGame(fakeGame),
+                "Updating nonexistent game should not throw (but do nothing)");
+    }
 }
