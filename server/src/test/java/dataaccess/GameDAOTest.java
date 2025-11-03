@@ -78,4 +78,18 @@ public class GameDAOTest {
         assertDoesNotThrow(() -> gameDAO.updateGame(fakeGame),
                 "Updating nonexistent game should not throw (but do nothing)");
     }
+
+    @Test
+    public void listGamesEmpty() throws DataAccessException {
+        gameDAO.clear();
+        var games = gameDAO.listGames();
+        assertNotNull(games, "List should not be null even if no games exist");
+        assertTrue(games.isEmpty(), "List should be empty when no games exist");
+    }
+
+    @Test
+    public void clearEmptyTable() throws DataAccessException {
+        gameDAO.clear();
+        assertDoesNotThrow(() -> gameDAO.clear(), "Clearing an already empty table should not throw");
+    }
 }
