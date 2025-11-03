@@ -52,4 +52,10 @@ public class UserDAOTest {
         Optional<UserData> result = userDAO.getUser("nonexistent");
         assertTrue(result.isEmpty(), "Getting a nonexistent user should return empty");
     }
+
+    @Test
+    public void clearEmptyTable() throws DataAccessException {
+        userDAO.clear();
+        assertDoesNotThrow(() -> userDAO.clear(), "Clearing an already empty table should not throw");
+    }
 }
