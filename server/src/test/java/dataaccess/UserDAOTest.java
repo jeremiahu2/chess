@@ -46,4 +46,10 @@ public class UserDAOTest {
         Optional<UserData> result = userDAO.getUser("chris");
         assertTrue(result.isEmpty(), "All users should be removed after clear()");
     }
+
+    @Test
+    public void getUserNotFoundReturnsEmpty() throws DataAccessException {
+        Optional<UserData> result = userDAO.getUser("nonexistent");
+        assertTrue(result.isEmpty(), "Getting a nonexistent user should return empty");
+    }
 }
