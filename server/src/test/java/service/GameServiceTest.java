@@ -3,9 +3,9 @@ package service;
 import dataaccess.InMemoryDataAccess;
 import dataaccess.DataAccessException;
 import model.GameData;
-import requests.RegisterRequest;
-import requests.CreateGameRequest;
-import requests.JoinGameRequest;
+import service.requests.RegisterRequest;
+import service.requests.CreateGameRequest;
+import service.requests.JoinGameRequest;
 import results.CreateGameResult;
 import org.junit.jupiter.api.*;
 
