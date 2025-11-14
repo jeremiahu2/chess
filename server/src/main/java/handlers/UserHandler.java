@@ -3,8 +3,8 @@ package handlers;
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 import service.UserService;
-import service.requests.RegisterRequest;
-import service.results.RegisterResult;
+import requests.RegisterRequest;
+import results.RegisterResult;
 import dataaccess.DataAccessException;
 import java.util.Map;
 

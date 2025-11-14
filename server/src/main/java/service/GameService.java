@@ -4,9 +4,9 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import model.GameData;
 import chess.ChessGame;
-import service.requests.CreateGameRequest;
-import service.requests.JoinGameRequest;
-import service.results.CreateGameResult;
+import requests.CreateGameRequest;
+import requests.JoinGameRequest;
+import results.CreateGameResult;
 
 import java.util.List;
 import java.util.Optional;

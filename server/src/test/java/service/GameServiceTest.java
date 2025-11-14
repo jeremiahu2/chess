@@ -3,11 +3,10 @@ package service;
 import dataaccess.InMemoryDataAccess;
 import dataaccess.DataAccessException;
 import model.GameData;
-import service.GameService;
-import service.UserService;
-import service.requests.CreateGameRequest;
-import service.requests.JoinGameRequest;
-import service.results.CreateGameResult;
+import requests.RegisterRequest;
+import requests.CreateGameRequest;
+import requests.JoinGameRequest;
+import results.CreateGameResult;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public class GameServiceTest {
         dao = new InMemoryDataAccess();
         gameService = new GameService(dao);
         var userService = new UserService(dao);
-        var regReq = new service.requests.RegisterRequest("player1", "pw", "p1@example.com");
+        var regReq = new RegisterRequest("player1", "pw", "p1@example.com");
         token = userService.register(regReq).authToken();
     }
 
@@ -79,7 +78,7 @@ public class GameServiceTest {
     @Test
     public void joinGameSuccessBlack() throws Exception {
         var userService = new UserService(dao);
-        String token2 = userService.register(new service.requests.RegisterRequest("player2","pw","p2@example.com")).authToken();
+        String token2 = userService.register(new RegisterRequest("player2","pw","p2@example.com")).authToken();
         CreateGameRequest req = new CreateGameRequest("Match2");
         int gameID = gameService.createGame(token, req).gameID();
 

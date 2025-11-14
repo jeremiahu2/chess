@@ -1,3 +1,3 @@
-package service.results;
+package results;
 
 public record CreateGameResult(int gameID) {}
