@@ -3,8 +3,8 @@ package service;
 import dataaccess.InMemoryDataAccess;
 import dataaccess.DataAccessException;
 import org.junit.jupiter.api.*;
-import requests.RegisterRequest;
-import requests.LoginRequest;
+import service.requests.RegisterRequest;
+import service.requests.LoginRequest;
 import results.RegisterResult;
 import results.LoginResult;
 
