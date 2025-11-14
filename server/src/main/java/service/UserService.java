@@ -3,8 +3,8 @@ package service;
 import dataaccess.*;
 import model.*;
 import org.mindrot.jbcrypt.BCrypt;
-import requests.LoginRequest;
-import requests.RegisterRequest;
+import service.requests.LoginRequest;
+import service.requests.RegisterRequest;
 import results.LoginResult;
 import results.RegisterResult;
 
