@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import io.javalin.http.Context;
 import service.UserService;
 import service.requests.LoginRequest;
-import results.LoginResult;
+import service.results.LoginResult;
 import dataaccess.DataAccessException;
 import java.util.Map;
 

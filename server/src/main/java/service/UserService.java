@@ -5,8 +5,8 @@ import model.*;
 import org.mindrot.jbcrypt.BCrypt;
 import service.requests.LoginRequest;
 import service.requests.RegisterRequest;
-import results.LoginResult;
-import results.RegisterResult;
+import service.results.LoginResult;
+import service.results.RegisterResult;
 
 import java.util.Optional;
 

@@ -6,7 +6,7 @@ import model.GameData;
 import chess.ChessGame;
 import service.requests.CreateGameRequest;
 import service.requests.JoinGameRequest;
-import results.CreateGameResult;
+import service.results.CreateGameResult;
 
 import java.util.List;
 import java.util.Optional;
