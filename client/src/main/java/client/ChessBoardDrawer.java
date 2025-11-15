@@ -2,6 +2,7 @@ package client;
 
 import model.GameData;
 import chess.ChessBoard;
+import ui.EscapeSequences;
 
 public class ChessBoardDrawer {
 
@@ -39,5 +40,9 @@ public class ChessBoardDrawer {
             } catch (NoSuchMethodException ignored) {}
         } catch (Exception ignored) {}
         return null;
+    }
+
+    private void render(ChessBoard board, boolean whitePerspective) {
+        final String RESET = EscapeSequences.RESET_BG_COLOR + EscapeSequences.RESET_TEXT_COLOR;
     }
 }
