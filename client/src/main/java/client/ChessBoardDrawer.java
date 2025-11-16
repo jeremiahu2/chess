@@ -44,5 +44,53 @@ public class ChessBoardDrawer {
 
     private void render(ChessBoard board, boolean whitePerspective) {
         final String RESET = EscapeSequences.RESET_BG_COLOR + EscapeSequences.RESET_TEXT_COLOR;
+        final String LIGHT_BG = EscapeSequences.SET_BG_COLOR_WHITE;
+        final String DARK_BG = EscapeSequences.SET_BG_COLOR_DARK_GREY;
+        System.out.print("    ");
+        if (whitePerspective) {
+            for (char f = 'a'; f <= 'h'; f++) {
+                System.out.print("  " + f + " ");
+            }
+        } else {
+            for (char f = 'h'; f >= 'a'; f--) System.out.print("  " + f + " ");
+        }
+        System.out.println();
+        if (whitePerspective) {
+            for (int rank = 8; rank >=1; rank--) {
+                System.out.printf(" %d  ", rank);
+                for (int file = 1; file <= 8; file++) {
+                    boolean lightSquare = squareIsLight(rank, file);
+                    String bg = lightSquare ? LIGHT_BG : DARK_BG;
+                    String cell = cellString(board, rank, file);
+                    System.out.print(bg + cell + RESET);
+                }
+                System.out.printf("  %d%n", rank);
+            }
+        } else {
+            for (int rank = 1; rank <=8; rank++) {
+                System.out.printf(" %d  ", rank);
+                for (int file = 8; file >= 1; file--) {
+                    boolean lightSquare = squareIsLight(rank, file);
+                    String bg = lightSquare ? LIGHT_BG : DARK_BG;
+                    String cell = cellString(board, rank, file);
+                    System.out.print(bg + cell + RESET);
+                }
+                System.out.printf("  %d%n", rank);
+            }
+        }
+        System.out.print("     ");
+        if (whitePerspective) {
+            for (char f = 'a'; f <= 'h'; f++) {
+                System.out.print("  " + f + " ");
+            }
+        } else {
+            for (char f = 'h'; f >= 'a'; f--) {
+                System.out.print("  " + f + " ");
+            }
+        }
+        System.out.println();
     }
+
+
 }
+
