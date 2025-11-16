@@ -91,6 +91,11 @@ public class ChessBoardDrawer {
         System.out.println();
     }
 
+    private boolean squareIsLight(int rank, int file) {
+        int rIndex = 8 - rank;
+        int cIndex = file - 1;
+        return ((rIndex + cIndex) % 2 == 0);
+    }
+
 
 }
-
