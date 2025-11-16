@@ -1,5 +1,8 @@
 package client;
 
+import chess.ChessGame;
+import chess.ChessPosition;
+import chess.ChessPiece;
 import model.GameData;
 import chess.ChessBoard;
 import ui.EscapeSequences;
@@ -97,5 +100,27 @@ public class ChessBoardDrawer {
         return ((rIndex + cIndex) % 2 == 0);
     }
 
-
+    private String cellString(ChessBoard board, int rank, int file) {
+        try {
+            ChessPosition pos = new ChessPosition(rank, file);
+            ChessPiece p = board.getPiece(pos);
+            if (p == null) {
+                return EscapeSequences.EMPTY;
+            }
+            ChessPiece.PieceType type = p.getPieceType();
+            var color = p.getTeamColor();
+            boolean white = color == ChessGame.TeamColor.WHITE;
+            return switch (type) {
+                case KING -> white ? EscapeSequences.WHITE_KING : EscapeSequences.BLACK_KING;
+                case QUEEN -> white ? EscapeSequences.WHITE_QUEEN : EscapeSequences.BLACK_QUEEN;
+                case ROOK -> white ? EscapeSequences.WHITE_ROOK : EscapeSequences.BLACK_ROOK;
+                case BISHOP -> white ? EscapeSequences.WHITE_BISHOP : EscapeSequences.BLACK_BISHOP;
+                case KNIGHT -> white ? EscapeSequences.WHITE_KNIGHT : EscapeSequences.BLACK_KNIGHT;
+                case PAWN -> white ? EscapeSequences.WHITE_PAWN : EscapeSequences.BLACK_PAWN;
+                default -> " ? ";
+            };
+        } catch (Exception e) {
+            return " ? ";
+        }
+    }
 }
