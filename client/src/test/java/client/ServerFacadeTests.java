@@ -88,5 +88,17 @@ public class ServerFacadeTests {
         facade.register(new RegisterRequest("login_bad", "correct", "login_bad@example.com"));
         assertThrows(Exception.class, () -> facade.login(new LoginRequest("login_bad", "incorrect")));
     }
+
+    @Test
+    public void logoutPositive() throws Exception {
+        facade.register(new RegisterRequest("logout_ok", "pw", "logout_ok@example.com"));
+        assertDoesNotThrow(() -> facade.logout());
+        assertThrows(Exception.class, () -> facade.listGames());
+    }
+
+    @Test
+    public void logoutNegative() {
+        assertThrows(Exception.class, () -> facade.logout());
+    }
 }
 
