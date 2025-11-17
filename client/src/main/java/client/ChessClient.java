@@ -164,6 +164,28 @@ public class ChessClient {
         }
     }
 
+    private void doPlay() {
+        try {
+            int idx = askGameNumber();
+            GameData g = lastListed.get(idx);
+            if (g == null) {
+                System.out.println("Invalid selection.");
+                return;
+            }
+            System.out.print("Color (white/black): ");
+            String color = scanner.nextLine().trim().toLowerCase(Locale.ROOT);
+            if (!color.equals("white") && !color.equals("black")) {
+                System.out.println("Invalid color.");
+                return;
+            }
+            JoinGameRequest joinReq = makeJoinRequest(String.valueOf(g.gameID()), color);
+            facade.joinGame(joinReq);
+            drawer.draw(g, color.equals("white"));
+        } catch (Exception e) {
+            System.out.println("Play failed: " + safeMsg(e));
+        }
+    }
+
 
 }
 
