@@ -194,9 +194,8 @@ public class ChessClient {
                 System.out.println("Invalid selection.");
                 return;
             }
-            JoinGameRequest joinReq = makeJoinRequest(String.valueOf(g.gameID()), null);
-            facade.joinGame(joinReq);
             drawer.draw(g, true);
+            System.out.println("Displayed the game board (observer mode).");
         } catch (Exception e) {
             System.out.println("Observe failed: " + safeMsg(e));
         }
@@ -209,15 +208,15 @@ public class ChessClient {
         } catch (NumberFormatException e) {
             throw new RuntimeException("Invalid game id: " + gameIdString);
         }
-        String playerColor;
-        if (color == null) {
-            playerColor = "NONE";
-        } else if (color.equalsIgnoreCase("white")) {
-            playerColor = "WHITE";
-        } else if (color.equalsIgnoreCase("black")) {
-            playerColor = "BLACK";
-        } else {
-            throw new RuntimeException("Invalid color: " + color);
+        String playerColor = null;
+        if (color != null) {
+            if (color.equalsIgnoreCase("white")) {
+                playerColor = "WHITE";
+            } else if (color.equalsIgnoreCase("black")) {
+                playerColor = "BLACK";
+            } else {
+                throw new RuntimeException("Invalid color: " + color);
+            }
         }
         return new JoinGameRequest(playerColor, gameID);
     }
