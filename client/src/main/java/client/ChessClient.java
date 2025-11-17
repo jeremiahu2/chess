@@ -72,5 +72,49 @@ public class ChessClient {
             System.out.println("Registration failed: " + safeMsg(ex))
         }
     }
+
+    private void doLogin() {
+        try {
+            System.out.print("username: ");
+            String u = scanner.nextLine().trim();
+            System.out.print("password: ");
+            String p = scanner.nextLine().trim();
+            LoginResult res = facade.login(new LoginRequest(u, p));
+            System.out.println("Logged in as " + res.username());
+        } catch (Exception ex) {
+            System.out.println("Login failed: " + safeMsg(ex));
+        }
+    }
+
+    private boolean postLoginLoop(){
+        System.out.print("\npostLogin> ");
+        String command = scanner.nextLine().trim().toLowerCase(Locale.ROOT);
+        switch (command) {
+            case "help":
+                printPostLoginHelp();
+                break;
+            case "logout":
+                doLogout();
+                break;
+            case "create":
+                doCreate();
+                break;
+            case "list":
+                doList();
+                break;
+            case "play":
+                doPlay();
+                break;
+            case "observe":
+                doObserve();
+                break;
+            case "quit":
+                exit();
+                break;
+            default:
+                System.out.println("Unknown command. Type 'help'.");
+        }
+        return isLoggedIn();
+    }
 }
 
