@@ -69,7 +69,7 @@ public class ChessClient {
             RegisterResult res = facade.register(new RegisterRequest(u, p, e));
             System.out.println("Registered and logged in as " + res.username());
         } catch (Exception ex) {
-            System.out.println("Registration failed: " + safeMsg(ex))
+            System.out.println("Registration failed: " + safeMsg(ex));
         }
     }
 
@@ -239,6 +239,26 @@ public class ChessClient {
         }
     }
 
+    private boolean isLoggedIn() {
+        try {
+            facade.listGames();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
+    private void exit() {
+        System.out.println("Goodbye!");
+        System.exit(0);
+    }
+
+    private String safeMsg(Exception e) {
+        String m = e.getMessage();
+        return (m == null || m.isBlank()) ? "An error occurred." : m;
+    }
+
+    private String safe(String s, String fallback) {
+        return (s == null || s.isBlank()) ? fallback : s;
+    }
 }
-
