@@ -13,4 +13,22 @@ public class ChessClient {
     public ChessClient(ServerFacade facade) {
         this.facade = facade;
     }
+
+    public void run() {
+        System.out.println("Welcome to CS240 Chess Game! (Phase 5)");
+        System.out.println("Type 'help' for commands.");
+        boolean loggedIn = false;
+        while (true) {
+            try {
+                if (!loggedIn) {
+                    loggedIn = preLoginLoop();
+                } else {
+                    loggedIn = postLoginLoop();
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + (e.getMessage() == null ? "An error occured." : e.getMessage()));
+            }
+        }
+    }
 }
+
