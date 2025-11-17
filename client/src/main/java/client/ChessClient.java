@@ -30,5 +30,27 @@ public class ChessClient {
             }
         }
     }
+
+    private boolean preLoginLoop() {
+        System.out.print("\nprelogin> ");
+        String command = scanner.nextLine().trim().toLowerCase(Locale.ROOT);
+        switch (command) {
+            case "help":
+                printPreLoginHelp();
+                break;
+            case "register":
+                doRegister();
+                break;
+            case "login":
+                doLogin();
+                break;
+            case "quit":
+                exit();
+                break;
+            default:
+                System.out.println("Unknown command. Type 'help'.");
+        }
+        return isLoggedIn();
+    }
 }
 
