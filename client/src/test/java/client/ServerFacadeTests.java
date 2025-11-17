@@ -9,6 +9,7 @@ import java.io.InputStream;
 import service.requests.*;
 import service.results.*;
 import static org.junit.jupiter.api.Assertions.*;
+import model.GameData;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ServerFacadeTests {
@@ -112,6 +113,21 @@ public class ServerFacadeTests {
     @Test
     public void createGameNegative() throws Exception {
         assertThrows(Exception.class, () -> facade.createGame(new CreateGameRequest("NoAuthGame")));
+    }
+
+    @Test
+    public void listGamesPositive() throws Exception {
+        facade.register(new RegisterRequest("list_ok", "pw", "list_ok@example.com"));
+        facade.createGame(new CreateGameRequest("ListG1"));
+        facade.createGame(new CreateGameRequest("ListG2"));
+        GameData[] games = facade.listGames();
+        assertNotNull(games);
+        assertTrue(games.length >= 2);
+    }
+
+    @Test
+    public void listGamesNegative() throws Exception {
+        assertThrows(Exception.class, () -> facade.listGames());
     }
 }
 
