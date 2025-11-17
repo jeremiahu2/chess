@@ -192,7 +192,7 @@ public class ChessClient {
             GameData g = lastListed.get(idx);
             if (g == null) {
                 System.out.println("Invalid selection.");
-//                return;
+                return;
             }
             JoinGameRequest joinReq = makeJoinRequest(String.valueOf(g.gameID()), null);
             facade.joinGame(joinReq);
