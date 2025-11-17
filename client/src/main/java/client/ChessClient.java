@@ -186,6 +186,22 @@ public class ChessClient {
         }
     }
 
+    private void doObserve() {
+        try {
+            int idx = askGameNumber();
+            GameData g = lastListed.get(idx);
+            if (g == null) {
+                System.out.println("Invalid selection.");
+//                return;
+            }
+            JoinGameRequest joinReq = makeJoinRequest(String.valueOf(g.gameID()), null);
+            facade.joinGame(joinReq);
+            drawer.draw(g, true);
+        } catch (Exception e) {
+            System.out.println("Observe failed: " + safeMsg(e));
+        }
+    }
+
 
 }
 
