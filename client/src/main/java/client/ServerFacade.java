@@ -47,9 +47,12 @@ public class ServerFacade {
         return makeRequest("/game", "POST", request, CreateGameResult.class, authToken);
     }
 
+    public record ListGamesResult(GameData[] games) {}
+
     public GameData[] listGames() throws Exception {
-        Type listType = TypeToken.getArray(GameData.class).getType();
-        return makeRequest("/game", "GET", null, listType, authToken);
+        Type responseType = new TypeToken<ListGamesResult>() {}.getType();
+        ListGamesResult result = makeRequest("/game", "GET", null, responseType, authToken);
+        return result.games();
     }
 
     public void joinGame(JoinGameRequest request) throws Exception {
