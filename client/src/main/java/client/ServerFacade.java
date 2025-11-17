@@ -14,7 +14,7 @@ public class ServerFacade {
 
     private final String serverUrl;
     private String authToken;   // stored after login/register
-    private final Gson GSON = new Gson();
+    private final Gson gson = new Gson();
 
     public ServerFacade(String serverUrl) {
         this.serverUrl = serverUrl;
@@ -74,7 +74,7 @@ public class ServerFacade {
         if (requestObj != null) {
             connection.setDoOutput(true);
             try (OutputStream os = connection.getOutputStream()) {
-                os.write(GSON.toJson(requestObj).getBytes());
+                os.write(gson.toJson(requestObj).getBytes());
             }
         }
         int status = connection.getResponseCode();
@@ -89,9 +89,9 @@ public class ServerFacade {
         }
         try (InputStreamReader reader = new InputStreamReader(stream)) {
             if (responseType instanceof Class<?>) {
-                return GSON.fromJson(reader, (Class<T>) responseType);
+                return gson.fromJson(reader, (Class<T>) responseType);
             } else {
-                return GSON.fromJson(reader, (Type) responseType);
+                return gson.fromJson(reader, (Type) responseType);
             }
         }
     }
