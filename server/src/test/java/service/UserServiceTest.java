@@ -5,8 +5,8 @@ import dataaccess.DataAccessException;
 import org.junit.jupiter.api.*;
 import service.requests.RegisterRequest;
 import service.requests.LoginRequest;
-import results.RegisterResult;
-import results.LoginResult;
+import service.results.RegisterResult;
+import service.results.LoginResult;
 
 import static org.junit.jupiter.api.Assertions.*;
 

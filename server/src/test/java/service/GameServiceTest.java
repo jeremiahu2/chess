@@ -6,7 +6,7 @@ import model.GameData;
 import service.requests.RegisterRequest;
 import service.requests.CreateGameRequest;
 import service.requests.JoinGameRequest;
-import results.CreateGameResult;
+import service.results.CreateGameResult;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
