@@ -116,5 +116,32 @@ public class ChessClient {
         }
         return isLoggedIn();
     }
+
+    private void printPostLoginHelp() {
+        System.out.println("PostLogin commands: create | list | play | observe | logout | quit | help");
+    }
+
+    private void doLogout() {
+        try {
+            facade.logout();
+            lastListed.clear();
+            System.out.println("Logged out.");
+        } catch (Exception e) {
+            System.out.println("Logout failed: " + safeMsg(e));
+        }
+    }
+
+    private void doCreate() {
+        try {
+            System.out.print("Game name: ");
+            String name = scanner.nextLine().trim();
+            CreateGameResult res = facade.createGame(new CreateGameRequest(name));
+            System.out.println("Created game: " + name);
+        } catch (Exception e) {
+            System.out.println("Create failed: " + safeMsg(e));
+        }
+    }
+
+
 }
 
