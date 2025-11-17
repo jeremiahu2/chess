@@ -1,8 +1,9 @@
 package client;
 
-import model.GameData;
-
 import java.util.*;
+import model.GameData;
+import service.requests.*;
+import service.results.*;
 
 public class ChessClient {
     private final ServerFacade facade;
@@ -51,6 +52,25 @@ public class ChessClient {
                 System.out.println("Unknown command. Type 'help'.");
         }
         return isLoggedIn();
+    }
+
+    private void printPreLoginHelp() {
+        System.out.println("Prelogin commands: register | login | quit | help");
+    }
+
+    private void doRegister() {
+        try {
+            System.out.print("username: ");
+            String u = scanner.nextLine().trim();
+            System.out.print("password: ");
+            String p = scanner.nextLine().trim();
+            System.out.print("email: ");
+            String e = scanner.nextLine().trim();
+            RegisterResult res = facade.register(new RegisterRequest(u, p, e));
+            System.out.println("Registered and logged in as " + res.username());
+        } catch (Exception ex) {
+            System.out.println("Registration failed: " + safeMsg(ex))
+        }
     }
 }
 
