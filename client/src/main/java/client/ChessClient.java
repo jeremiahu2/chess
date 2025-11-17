@@ -222,6 +222,23 @@ public class ChessClient {
         return new JoinGameRequest(playerColor, gameID);
     }
 
+    private int askGameNumber() {
+        if (lastListed.isEmpty()) {
+            throw new RuntimeException("No games listed. Run 'list' first.");
+        }
+        System.out.print("Enter game number :");
+        String s = scanner.nextLine().trim();
+        try {
+            int n = Integer.parseInt(s);
+            if (!lastListed.containsKey(n)) {
+                throw new RuntimeException("Invalid Number.");
+            }
+            return n;
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Please enter a valid number.");
+        }
+    }
+
 
 }
 
