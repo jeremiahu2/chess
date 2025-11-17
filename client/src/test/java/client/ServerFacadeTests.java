@@ -6,6 +6,9 @@ import org.junit.jupiter.api.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.InputStream;
+import service.requests.*;
+import service.results.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ServerFacadeTests {
@@ -52,6 +55,16 @@ public class ServerFacadeTests {
             }
         } catch (Exception Ignored) {}
         return code >= 200 && code < 300;
+    }
+
+    @Test
+    public void registerPositive() throws Exception {
+        RegisterRequest req = new RegisterRequest("user_reg_pos", "pw", "u_reg_pos@example.cpm");
+        RegisterResult r = facade.register(req);
+        assertNotNull(r);
+        assertEquals("user_reg_pos", r.username());
+        assertNotNull(r.authToken());
+        assertTrue(r.authToken().length() > 5);
     }
 }
 
