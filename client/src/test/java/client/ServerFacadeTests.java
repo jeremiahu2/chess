@@ -82,4 +82,11 @@ public class ServerFacadeTests {
         assertEquals("login_ok", res.username());
         assertNotNull(res.authToken());
     }
+
+    @Test
+    public void loginNegative() throws Exception {
+        facade.register(new RegisterRequest("login_bad", "correct", "login_bad@example.com"));
+        assertThrows(Exception.class, () -> facade.login(new LoginRequest("login_bad", "incorrect")));
+    }
 }
+
