@@ -142,6 +142,28 @@ public class ChessClient {
         }
     }
 
+    private void doList() {
+        try {
+            GameData[] games = facade.listGames();
+            lastListed.clear();
+            if (games == null || games.length == 0) {
+                System.out.println("No games found.");
+                return;
+            }
+            for (int i = 0; i < games.length; i++) {
+                GameData g = games[i];
+                int idx = i + 1;
+                lastListed.put(idx, g);
+                String name = g.gameName();
+                String white = g.whiteUsername() == null || g.whiteUsername().isBlank() ? "-" : g.whiteUsername();
+                String black = g.blackUsername() == null || g.blackUsername().isBlank() ? "-" : g.blackUsername();
+                System.out.printf("%d) %s (white: %s, black: %s)%n", idx, safe(name, "Unnamed"), white, black);
+            }
+        } catch (Exception e) {
+            System.out.println("List failed: " + safeMsg(e));
+        }
+    }
+
 
 }
 
