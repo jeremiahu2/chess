@@ -202,6 +202,26 @@ public class ChessClient {
         }
     }
 
+    private JoinGameRequest makeJoinRequest(String gameIdString, String color) {
+        int gameID;
+        try {
+            gameID = Integer.parseInt(gameIdString);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid game id: " + gameIdString);
+        }
+        String playerColor;
+        if (color == null) {
+            playerColor = "NONE";
+        } else if (color.equalsIgnoreCase("white")) {
+            playerColor = "WHITE";
+        } else if (color.equalsIgnoreCase("black")) {
+            playerColor = "BLACK";
+        } else {
+            throw new RuntimeException("Invalid color: " + color);
+        }
+        return new JoinGameRequest(playerColor, gameID);
+    }
+
 
 }
 
