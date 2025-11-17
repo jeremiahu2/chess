@@ -66,5 +66,12 @@ public class ServerFacadeTests {
         assertNotNull(r.authToken());
         assertTrue(r.authToken().length() > 5);
     }
+
+    @Test
+    public void registerNegative() throws Exception {
+        RegisterRequest req = new RegisterRequest("user_dup", "pw", "dup@example.com");
+        facade.register(req);
+        assertThrows(Exception.class, () -> facade.register(req));
+    }
 }
 
