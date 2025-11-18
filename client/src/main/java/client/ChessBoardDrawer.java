@@ -19,23 +19,26 @@ public class ChessBoardDrawer {
     }
 
     private ChessBoard extractBoard(GameData data) {
-        if (data == null) return null;
-        try {
+        if (data == null) {
+            return null;
+        } try {
             var game = data.game();
-            if (game == null) return null;
-
-            try {
+            if (game == null) {
+                return null;
+            } try {
                 var m = game.getClass().getMethod("getBoard");
                 Object res = m.invoke(game);
-                if (res instanceof ChessBoard) return (ChessBoard) res;
+                if (res instanceof ChessBoard) {
+                    return (ChessBoard) res;
+                }
             } catch (NoSuchMethodException ignored) {}
-
             try {
                 var m = game.getClass().getMethod("board");
                 Object res = m.invoke(game);
-                if (res instanceof ChessBoard) return (ChessBoard) res;
+                if (res instanceof ChessBoard) {
+                    return (ChessBoard) res;
+                }
             } catch (NoSuchMethodException ignored) {}
-
         } catch (Exception ignored) {}
         return null;
     }
@@ -46,19 +49,23 @@ public class ChessBoardDrawer {
         final String darkBg = EscapeSequences.SET_BG_COLOR_LIGHT_GREY;
         System.out.print("    ");
         if (whitePerspective) {
-            for (char f = 'a'; f <= 'h'; f++) System.out.print("  " + f + " ");
+            for (char f = 'a'; f <= 'h'; f++) {
+                System.out.print("  " + f + " ");
+            }
         } else {
-            for (char f = 'h'; f >= 'a'; f--) System.out.print("  " + f + " ");
+            for (char f = 'h'; f >= 'a'; f--) {
+                System.out.print("  " + f + " ");
+            }
         }
         System.out.println();
 
         if (whitePerspective) {
             for (int rank = 8; rank >= 1; rank--) {
                 System.out.printf(" %d  ", rank);
-                for (int file = 1; file <= 8; file++) {
-                    boolean lightSquare = squareIsLight(rank, file);
+                for (int file1 = 1; file1 <= 8; file1++) {
+                    boolean lightSquare = squareIsLight(rank, file1);
                     String bg = lightSquare ? lightBg : darkBg;
-                    String cell = cellString(board, rank, file);
+                    String cell = cellString(board, rank, file1);
                     System.out.print(bg + cell + reset);
                 }
                 System.out.printf("  %d%n", rank);
@@ -66,21 +73,24 @@ public class ChessBoardDrawer {
         } else {
             for (int rank = 1; rank <= 8; rank++) {
                 System.out.printf(" %d  ", rank);
-                for (int file = 8; file >= 1; file--) {
-                    boolean lightSquare = squareIsLight(rank, file);
+                for (int file2 = 8; file2 >= 1; file2--) {
+                    boolean lightSquare = squareIsLight(rank, file2);
                     String bg = lightSquare ? lightBg : darkBg;
-                    String cell = cellString(board, rank, file);
+                    String cell = cellString(board, rank, file2);
                     System.out.print(bg + cell + reset);
                 }
                 System.out.printf("  %d%n", rank);
             }
         }
-
         System.out.print("     ");
         if (whitePerspective) {
-            for (char f = 'a'; f <= 'h'; f++) System.out.print("  " + f + " ");
+            for (char f = 'a'; f <= 'h'; f++) {
+                System.out.print("  " + f + " ");
+            }
         } else {
-            for (char f = 'h'; f >= 'a'; f--) System.out.print("  " + f + " ");
+            for (char f = 'h'; f >= 'a'; f--) {
+                System.out.print("  " + f + " ");
+            }
         }
         System.out.println();
     }
@@ -95,15 +105,13 @@ public class ChessBoardDrawer {
         try {
             ChessPosition pos = new ChessPosition(rank, file);
             ChessPiece p = board.getPiece(pos);
-            if (p == null) return EscapeSequences.EMPTY;
-
+            if (p == null) {
+                return EscapeSequences.EMPTY;
+            }
             ChessPiece.PieceType type = p.getPieceType();
             var color = p.getTeamColor();
             boolean white = color == ChessGame.TeamColor.WHITE;
-
-            // Darken black pieces
             String blackPieceColor = EscapeSequences.SET_TEXT_COLOR_DARK_GREY;
-
             return switch (type) {
                 case KING -> white ? EscapeSequences.WHITE_KING : blackPieceColor + EscapeSequences.BLACK_KING;
                 case QUEEN -> white ? EscapeSequences.WHITE_QUEEN : blackPieceColor + EscapeSequences.BLACK_QUEEN;
