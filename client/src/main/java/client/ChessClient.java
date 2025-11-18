@@ -69,7 +69,7 @@ public class ChessClient {
             RegisterResult res = facade.register(new RegisterRequest(u, p, e));
             System.out.println("Registered and logged in as " + res.username());
         } catch (Exception ex) {
-            System.out.println("Registration failed: " + safeMsg(ex));
+            System.out.println("Registration failed: Username or Password already taken ");
         }
     }
 
@@ -82,7 +82,7 @@ public class ChessClient {
             LoginResult res = facade.login(new LoginRequest(u, p));
             System.out.println("Logged in as " + res.username());
         } catch (Exception ex) {
-            System.out.println("Login failed: " + safeMsg(ex));
+            System.out.println("Login failed: Invalid Username or Password.");
         }
     }
 
@@ -127,7 +127,7 @@ public class ChessClient {
             lastListed.clear();
             System.out.println("Logged out.");
         } catch (Exception e) {
-            System.out.println("Logout failed: " + safeMsg(e));
+            System.out.println("Logout failed. type 'help' ");
         }
     }
 
@@ -138,7 +138,7 @@ public class ChessClient {
             CreateGameResult res = facade.createGame(new CreateGameRequest(name));
             System.out.println("Created game: " + name);
         } catch (Exception e) {
-            System.out.println("Create failed: " + safeMsg(e));
+            System.out.println("Create failed, please try again.");
         }
     }
 
@@ -160,7 +160,7 @@ public class ChessClient {
                 System.out.printf("%d) %s (white: %s, black: %s)%n", idx, safe(name, "Unnamed"), white, black);
             }
         } catch (Exception e) {
-            System.out.println("List failed: " + safeMsg(e));
+            System.out.println("List failed, no games available.");
         }
     }
 
@@ -182,7 +182,7 @@ public class ChessClient {
             facade.joinGame(joinReq);
             drawer.draw(g, color.equals("white"));
         } catch (Exception e) {
-            System.out.println("Play failed: " + safeMsg(e));
+            System.out.println("Play failed, type list to see available games.");
         }
     }
 
@@ -197,7 +197,7 @@ public class ChessClient {
             drawer.draw(g, true);
             System.out.println("Displayed the game board (observer mode).");
         } catch (Exception e) {
-            System.out.println("Observe failed: " + safeMsg(e));
+            System.out.println("Observe failed, type list to see available games.");
         }
     }
 
@@ -250,11 +250,6 @@ public class ChessClient {
     private void exit() {
         System.out.println("Goodbye!");
         System.exit(0);
-    }
-
-    private String safeMsg(Exception e) {
-        String m = e.getMessage();
-        return (m == null || m.isBlank()) ? "An error occurred." : m;
     }
 
     private String safe(String s, String fallback) {
