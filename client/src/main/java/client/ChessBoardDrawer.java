@@ -23,16 +23,19 @@ public class ChessBoardDrawer {
         try {
             var game = data.game();
             if (game == null) return null;
+
             try {
                 var m = game.getClass().getMethod("getBoard");
                 Object res = m.invoke(game);
                 if (res instanceof ChessBoard) return (ChessBoard) res;
             } catch (NoSuchMethodException ignored) {}
+
             try {
                 var m = game.getClass().getMethod("board");
                 Object res = m.invoke(game);
                 if (res instanceof ChessBoard) return (ChessBoard) res;
             } catch (NoSuchMethodException ignored) {}
+
         } catch (Exception ignored) {}
         return null;
     }
@@ -40,7 +43,7 @@ public class ChessBoardDrawer {
     private void render(ChessBoard board, boolean whitePerspective) {
         final String reset = EscapeSequences.RESET_BG_COLOR + EscapeSequences.RESET_TEXT_COLOR;
         final String lightBg = EscapeSequences.SET_BG_COLOR_WHITE;
-        final String darkBg = EscapeSequences.SET_BG_COLOR_DARK_GREY;
+        final String darkBg = EscapeSequences.SET_BG_COLOR_LIGHT_GREY;
         System.out.print("    ");
         if (whitePerspective) {
             for (char f = 'a'; f <= 'h'; f++) System.out.print("  " + f + " ");
@@ -48,6 +51,7 @@ public class ChessBoardDrawer {
             for (char f = 'h'; f >= 'a'; f--) System.out.print("  " + f + " ");
         }
         System.out.println();
+
         if (whitePerspective) {
             for (int rank = 8; rank >= 1; rank--) {
                 System.out.printf(" %d  ", rank);
@@ -71,6 +75,7 @@ public class ChessBoardDrawer {
                 System.out.printf("  %d%n", rank);
             }
         }
+
         System.out.print("     ");
         if (whitePerspective) {
             for (char f = 'a'; f <= 'h'; f++) System.out.print("  " + f + " ");
@@ -95,7 +100,10 @@ public class ChessBoardDrawer {
             ChessPiece.PieceType type = p.getPieceType();
             var color = p.getTeamColor();
             boolean white = color == ChessGame.TeamColor.WHITE;
+
+            // Darken black pieces
             String blackPieceColor = EscapeSequences.SET_TEXT_COLOR_DARK_GREY;
+
             return switch (type) {
                 case KING -> white ? EscapeSequences.WHITE_KING : blackPieceColor + EscapeSequences.BLACK_KING;
                 case QUEEN -> white ? EscapeSequences.WHITE_QUEEN : blackPieceColor + EscapeSequences.BLACK_QUEEN;
